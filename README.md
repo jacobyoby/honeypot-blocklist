@@ -5,7 +5,7 @@ self-operated [Cowrie](https://github.com/cowrie/cowrie)/Heralding sensor
 directly — SSH, FTP, telnet, MySQL, VNC — and ages off automatically once it
 goes quiet.
 
-- **181 IPs** · 176 credential-tier · 5 scanner-tier · updated `2026-07-22T19:00:01Z`
+- **181 IPs** · 176 credential-tier · 5 scanner-tier · updated `2026-07-22T19:33:23Z`
 - Formats: [`blocklist.txt`](blocklist.txt) (fail2ban/iptables drop-in) · [`blocklist.json`](blocklist.json) · [`blocklist.csv`](blocklist.csv)
 - **Canonical source: <https://jacobrakai.org/feed/>** — regenerated hourly.
   This repo is a periodic snapshot; pull the URL if you want current data.
@@ -79,6 +79,36 @@ use it to reason about recency.
 See [`configs/fail2ban-example.md`](configs/fail2ban-example.md). Point your
 refresh at `https://jacobrakai.org/feed/blocklist.txt` rather than at this repo,
 and refresh hourly.
+
+### MISP
+
+`blocklist.txt` works as a **freetext** feed with no configuration — it is bare
+one-IP-per-line, the same shape MISP already ingests from blocklist.de.
+
+To keep the per-IP metadata, use the header-less CSV as a **csv** feed with
+`value: 1`, `delimiter: ,`:
+
+```
+https://jacobrakai.org/feed/blocklist.misp.csv
+```
+
+Use that URL rather than `blocklist.csv`: MISP's CSV parser skips only
+`#`-prefixed lines, so the normal file's header row would be ingested as a data
+row and produce a junk attribute on every refresh.
+
+### OpenCTI
+
+Point a CSV Feed ingester at `blocklist.misp.csv` with a CSV Mapper. OpenCTI
+addresses columns by letter index and skips the first line, so the header-less
+variant is the correct target there too.
+
+### Column contract
+
+`ip, tier, bans, attempts, first_seen, last_seen, first_banned`
+
+Both MISP and OpenCTI map columns **positionally**, not by name. This order is
+therefore permanent — new columns are only ever appended on the right, never
+inserted or reordered. `validate.py` enforces it in CI.
 
 ## False positives / delisting
 

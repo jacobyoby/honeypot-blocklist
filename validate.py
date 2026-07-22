@@ -24,6 +24,13 @@ REQUIRED_META = {
 }
 REQUIRED_ENTRY = {"ip", "tier", "bans", "attempts", "first_seen", "last_seen"}
 
+# The published CSV column contract, in order. MISP feeds address columns by
+# position and OpenCTI CSV Mappers by letter index, and neither reads a header,
+# so this order is permanent: append on the right, never insert or reorder.
+# Keep in sync with CSV_COLUMNS in gen_feed.py.
+CSV_COLUMNS = ["ip", "tier", "bans", "attempts", "first_seen", "last_seen",
+               "first_banned"]
+
 errors = []
 warnings = []
 
@@ -133,14 +140,47 @@ def main():
     csv_ips = set()
     with open(cpath, newline="") as f:
         reader = csv.DictReader(f)
-        if reader.fieldnames and "ip" not in reader.fieldnames:
-            err(f"blocklist.csv header lacks an 'ip' column: {reader.fieldnames}")
+        if reader.fieldnames != CSV_COLUMNS:
+            err(f"blocklist.csv header {reader.fieldnames} does not match the "
+                f"published column contract {CSV_COLUMNS}. Column order is "
+                f"load-bearing for MISP/OpenCTI; append only, never reorder.")
         else:
             for n, row in enumerate(reader, 2):
                 if check_ip(row["ip"], f"blocklist.csv:{n}"):
                     csv_ips.add(row["ip"])
                 if row.get("tier") not in VALID_TIERS:
                     err(f"blocklist.csv:{n}: unknown tier {row.get('tier')!r}")
+
+    # ---- header-less CSV for MISP / OpenCTI ----
+    # These consumers address columns positionally and never read a header, so
+    # two things must hold: the file must not start with a header row (MISP
+    # would import it as a junk attribute), and the column order must match
+    # blocklist.csv exactly or every field lands in the wrong place silently.
+    mpath = os.path.join(d, "blocklist.misp.csv")
+    misp_ips = set()
+    if os.path.exists(mpath):
+        with open(mpath, newline="") as f:
+            rows = list(csv.reader(f))
+        if rows and rows[0] and rows[0][0].strip().lower() == "ip":
+            err("blocklist.misp.csv starts with a header row; MISP would "
+                "ingest it as data. It must be header-less.")
+        for n, row in enumerate(rows, 1):
+            if not row:
+                continue
+            if len(row) != len(CSV_COLUMNS):
+                err(f"blocklist.misp.csv:{n}: {len(row)} columns, "
+                    f"expected {len(CSV_COLUMNS)} ({','.join(CSV_COLUMNS)})")
+                continue
+            if check_ip(row[0], f"blocklist.misp.csv:{n}"):
+                misp_ips.add(row[0])
+            if row[1] not in VALID_TIERS:
+                err(f"blocklist.misp.csv:{n}: unknown tier {row[1]!r}")
+        if misp_ips != json_ips:
+            err(f"blocklist.misp.csv names a different set than blocklist.json "
+                f"({len(misp_ips)} vs {len(json_ips)})")
+    else:
+        warn("blocklist.misp.csv missing — MISP/OpenCTI consumers have no "
+             "header-less variant to point at")
 
     # ---- the three formats must name the same set ----
     if json_ips != txt_ips:
