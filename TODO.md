@@ -24,9 +24,8 @@ host (`~/honeypot-stats`) and has its own TODO.
       has stargazers; a release note or a tagged `v1` for the old format would
       give them something to pin to.
 
-- [ ] **Tag releases.** There is no tag for the 2026-07-20 initial format, so
-      "the old schema" is not fetchable. Tag retroactively before the history
-      grows.
+- [x] ~~**Tag releases.**~~ Done 2026-07-22: `v1.0.0` on the initial score
+      schema, `v2.0.0` on the tier schema. Both are local until pushed.
 
 - [ ] **Publish the overlap measurement.** The README claims ~20–25% overlap
       with FireHOL/Spamhaus. That was measured once, informally, against the
