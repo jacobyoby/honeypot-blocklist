@@ -27,10 +27,11 @@ host (`~/honeypot-stats`) and has its own TODO.
 - [x] ~~**Tag releases.**~~ Done 2026-07-22: `v1.0.0` on the initial score
       schema, `v2.0.0` on the tier schema. Both are local until pushed.
 
-- [ ] **Publish the overlap measurement.** The README claims ~20–25% overlap
-      with FireHOL/Spamhaus. That was measured once, informally, against the
-      114-entry list. Re-measure against the current 181 and publish the method,
-      or soften the claim.
+- [x] ~~**Publish the overlap measurement.**~~ Done 2026-07-22. The old
+      "~20–25% overlap" claim was wrong: actual overlap against the live
+      181-entry feed is **36.5%** (so 63.5% novel, not the ~75–80% implied).
+      Method published as `scripts/overlap.py` and the table is in the README.
+      Re-run it periodically — the number will drift as the aggregates catch up.
 
 ## Low
 

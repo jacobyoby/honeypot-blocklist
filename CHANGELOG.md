@@ -6,6 +6,22 @@ Notable changes to the published blocklist and its methodology. Format follows
 Methodology changes affect who appears on the list, so they are treated as
 breaking and called out explicitly.
 
+## [2026-07-22] — overlap measured
+
+### Fixed
+
+- **Corrected the novelty claim.** The README said "~20-25% overlap" with the
+  big aggregates, measured once informally against the retired 114-entry list.
+  Measured properly against the live 181-entry feed, actual overlap is
+  **36.5%** — so 63.5% of entries are novel, not the ~75-80% previously
+  implied. The claim was overstating the feed's uniqueness by roughly 12
+  points. Per-list breakdown is now in the README, and the measurement is
+  reproducible via `scripts/overlap.py` rather than asserted.
+
+  Two thirds novel is still a real result, and the README now also states the
+  honest ceiling: this is a small, single-vantage-point feed and belongs
+  alongside the large lists, not instead of them.
+
 ## [2026-07-22] — later same day
 
 ### Fixed — **data correctness**

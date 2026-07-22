@@ -13,8 +13,26 @@ goes quiet.
 ## Why another blocklist?
 
 Because this one is **original sensor data**, not a re-aggregation. Every IP here
-hit *my* honeypot directly. Only ~20-25% overlap the big aggregates (FireHOL, Spamhaus) —
-the rest are fresh attackers not yet on them. That's the point of a live sensor.
+hit *my* honeypot directly.
+
+**63.5% of the current list appears on no major public blocklist.** Measured
+2026-07-22 against the live 181-entry feed:
+
+| List | Overlap |
+|---|---|
+| firehol_level3 | 19.9% |
+| blocklist_de | 14.4% |
+| firehol_level1 | 13.8% |
+| spamhaus_drop | 13.3% |
+| dshield | 1.7% |
+| **any of the above** | **36.5%** |
+
+So roughly two thirds are attackers the big aggregates haven't listed. That's
+the point of a live sensor — and it's also the honest ceiling on this feed's
+value: it is small and it is one vantage point, so treat it as a supplement to
+the large lists, not a replacement.
+
+Reproduce it yourself: [`scripts/overlap.py`](scripts/overlap.py).
 
 ## How an IP gets on the list
 
