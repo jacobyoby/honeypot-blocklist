@@ -34,6 +34,44 @@ the large lists, not a replacement.
 
 Reproduce it yourself: [`scripts/overlap.py`](scripts/overlap.py).
 
+## What's actually in it — mostly telnet, not SSH
+
+Worth knowing before you use this, because it determines whether the list is
+relevant to you. Measured 2026-07-22, distinct published IPs by the protocol
+they attacked:
+
+| Protocol | IPs |
+|---|---|
+| **telnet** | **126** |
+| ssh | 33 |
+| mysql | 26 |
+| ftp | 6 |
+
+Despite SSH producing the *most events* (109,896 vs telnet's 86,431 over 30
+days), telnet contributes ~4× more distinct addresses. That is the IoT-botnet
+signature: many compromised devices each doing modest volume, versus a handful
+of SSH bruteforcers hammering hard. Because the list is per-IP, telnet
+dominates it.
+
+Comparing against other operators' honeypot feeds confirms it — overlap with
+dataplane.org's telnet feed is **45.3%**, against just **9.4%** for their SSH
+feed:
+
+| Peer honeypot feed | Overlap |
+|---|---|
+| dataplane telnetlogin (telnet) | 45.3% |
+| dataplane sshpwauth (SSH) | 9.4% |
+| greensnow | 3.3% |
+| dataplane vncrfb (VNC) | 1.7% |
+
+**So: treat this as a telnet/IoT-botnet list that also catches SSH, not an SSH
+list.** If you are looking specifically for SSH bruteforcers, dataplane's
+sshpwauth or DShield cover that population far better than this does.
+
+*(Peer feeds are queried for measurement only. dataplane.org is non-commercial
+and prohibits redistribution — none of their data is in this feed, which
+remains entirely original sensor output.)*
+
 ## How an IP gets on the list
 
 Two tiers. Both require real attack activity **within the last 30 days**;

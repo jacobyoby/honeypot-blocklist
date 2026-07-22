@@ -6,6 +6,37 @@ Notable changes to the published blocklist and its methodology. Format follows
 Methodology changes affect who appears on the list, so they are treated as
 breaking and called out explicitly.
 
+## [2026-07-22] — composition measured
+
+### Added
+
+- **Documented what this list actually consists of: telnet, not SSH.** By
+  distinct published IPs — telnet 126, ssh 33, mysql 26, ftp 6. SSH generates
+  the most *events* (109,896 vs 86,431 over 30 days) but from ~4× fewer hosts:
+  a handful of bruteforcers hammering hard, versus the many-compromised-devices
+  pattern of an IoT botnet. Since the list is per-IP, telnet dominates it.
+
+  Confirmed independently against other operators' honeypot feeds: 45.3%
+  overlap with dataplane.org's telnet list against 9.4% with their SSH list.
+  That ratio also explains the previously odd 1.7% DShield overlap — DShield is
+  SSH-focused, so low overlap was expected once the composition is known.
+
+  This matters to consumers choosing a blocklist, and nothing previously told
+  them. The README now says plainly that anyone hunting SSH bruteforcers is
+  better served by dataplane's sshpwauth or DShield.
+
+- **`scripts/overlap.py` now measures two groups**: aggregates (is this list
+  redundant?) and peers (do other honeypot operators see the same attackers?).
+  The peer comparison is the like-for-like one and is what surfaced the
+  composition finding.
+
+  Peer feeds are queried for **measurement only**. dataplane.org is
+  non-commercial and prohibits redistribution; none of its data enters this
+  CC0 feed, which remains entirely original sensor output.
+
+  Note the protocol table above is derived from the sensor database and is not
+  reproducible from the published feed alone; the overlap figures are.
+
 ## [2026-07-22] — overlap measured
 
 ### Fixed
