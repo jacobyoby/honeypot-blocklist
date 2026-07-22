@@ -6,7 +6,33 @@ Notable changes to the published blocklist and its methodology. Format follows
 Methodology changes affect who appears on the list, so they are treated as
 breaking and called out explicitly.
 
-## [2026-07-22]
+## [2026-07-22] — later same day
+
+### Fixed — **data correctness**
+
+- **`first_seen` was bookkeeping, not observation, and 74 of 181 entries had
+  `first_seen` after `last_seen`.** Credential-tier `first_seen` was taken from
+  the ban ledger's "first banned" timestamp — often written in a batch long
+  after the IP's last actual attack — while `last_seen` was the last observed
+  attack. The giveaway was dozens of unrelated IPs sharing a `first_seen` to
+  the same second.
+
+  Both fields now describe observed attack activity inside the window, so
+  `first_seen <= last_seen` always holds. The ban date is still published, as
+  the new **`first_banned`** field, which is explicitly bookkeeping: it may
+  predate the window or fall after `last_seen`, and is `null` for scanner-tier
+  entries.
+
+  Found by the new validator, not by inspection.
+
+### Added
+
+- **`validate.py` and CI.** Runs on every push — including the automated
+  hourly syncs — plus daily on a schedule. Checks that the three formats name
+  the same set, every address parses and is globally routable, tiers and
+  counts match the metadata, scanner entries carry `bans: 0`, and
+  `first_seen <= last_seen`. A bad generator run can no longer quietly publish
+  garbage to a list other people firewall on.
 
 ### Changed — **breaking, methodology**
 

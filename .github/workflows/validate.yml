@@ -1,0 +1,33 @@
+name: Validate blocklist
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # The hourly sync pushes data without human review, so an independent
+    # daily check catches a generator that started emitting valid-but-wrong
+    # data on a commit nobody looked at.
+    - cron: "17 6 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate published files
+        # Checks the three formats agree, every address is real and routable,
+        # tiers and counts are consistent, and first_seen <= last_seen.
+        run: python3 validate.py .

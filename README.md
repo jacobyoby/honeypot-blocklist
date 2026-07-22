@@ -5,7 +5,7 @@ self-operated [Cowrie](https://github.com/cowrie/cowrie)/Heralding sensor
 directly — SSH, FTP, telnet, MySQL, VNC — and ages off automatically once it
 goes quiet.
 
-- **181 IPs** · 176 credential-tier · 5 scanner-tier · updated `2026-07-22T17:53:56Z`
+- **181 IPs** · 176 credential-tier · 5 scanner-tier · updated `2026-07-22T18:18:54Z`
 - Formats: [`blocklist.txt`](blocklist.txt) (fail2ban/iptables drop-in) · [`blocklist.json`](blocklist.json) · [`blocklist.csv`](blocklist.csv)
 - **Canonical source: <https://jacobrakai.org/feed/>** — regenerated hourly.
   This repo is a periodic snapshot; pull the URL if you want current data.
@@ -43,12 +43,18 @@ tops out around 600 events, the scanner cluster starts near 1,350.
 
 ## Fields
 
-`ip`, `tier`, `bans`, `attempts`, `first_seen`, `last_seen`.
+`ip`, `tier`, `bans`, `attempts`, `first_seen`, `last_seen`, `first_banned`.
 
 `attempts` is lifetime credential attempts for credential-tier entries, and
 in-window connection events for scanner-tier ones. `bans` counts credential-tier
 ban cycles; it is always `0` for scanner-tier entries because their ban cycles
 are tracked separately — **both tiers are firewalled on the sensor.**
+
+`first_seen` and `last_seen` are both *observations* — attack activity inside
+the current window — so `first_seen <= last_seen` always holds. `first_banned`
+is *bookkeeping*: when the address was first firewalled. It may predate the
+window or fall after `last_seen`, and is `null` for scanner-tier entries. Don't
+use it to reason about recency.
 
 ## Usage
 
