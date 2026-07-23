@@ -4,7 +4,7 @@
 # Description : IP addresses observed attacking live honeypot sensors
 #               (SSH, FTP, telnet, MySQL, VNC). Honeypot-confirmed from
 #               my own logs, not inferred from third-party data.
-# Maintainer  : Jacob Durham
+# Maintainer  : jacobrakai
 # Homepage    : https://jacobrakai.org/feed/
 # Contact     : jacob@jacobrakai.org (delisting / false-positive reports)
 # Inclusion   : two tiers, both requiring attack activity within the
@@ -20,7 +20,7 @@
 #               BinaryEdge) are filtered out before publication — from
 #               BOTH tiers.
 # Entries     : 181 (177 credential, 4 scanner)
-# Updated     : 2026-07-23T17:00:01Z (refreshed hourly)
+# Updated     : 2026-07-23T18:07:24Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.

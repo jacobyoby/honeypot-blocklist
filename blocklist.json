@@ -2,7 +2,7 @@
  "meta": {
   "name": "jacobrakai-honeypot-blocklist",
   "description": "Honeypot-confirmed attacker IPs observed against live decoy services (SSH, FTP, telnet, MySQL, VNC): credential-tier entries submitted login credentials repeatedly; scanner-tier entries probed at abusive volume without ever submitting credentials.",
-  "maintainer": "Jacob Durham",
+  "maintainer": "jacobrakai",
   "homepage": "https://jacobrakai.org/feed/",
   "contact": "jacob@jacobrakai.org",
   "inclusion_criteria": "two tiers, both requiring real attack activity within the last 30 days: 'credential' = honeypot-confirmed repeated credential-attack attempts (50+); 'scanner' = sustained credential-less abuse, 1000+ connection/probe events in-window",
@@ -13,7 +13,7 @@
    "credential": 177,
    "scanner": 4
   },
-  "updated": "2026-07-23T17:00:01Z",
+  "updated": "2026-07-23T18:07:24Z",
   "update_frequency": "hourly",
   "license": "CC0-1.0",
   "field_notes": "tier: 'credential' or 'scanner'. For credential-tier entries, attempts = lifetime credential attempts and bans = ban cycles; for scanner-tier entries, attempts = connection events inside the current window and bans is always 0 \u2014 both tiers are firewalled on the sensor, but scanner ban cycles are tracked separately and are not counted in this field. first_seen and last_seen both describe observed attack activity inside the current window, so first_seen <= last_seen always holds. first_banned is bookkeeping \u2014 when this IP was first firewalled \u2014 and may fall outside the window or after last_seen; it is null for scanner-tier entries.",
@@ -671,7 +671,7 @@
    "bans": 2,
    "attempts": 140,
    "first_seen": "2026-07-13T18:28:58Z",
-   "last_seen": "2026-07-23T09:24:00Z",
+   "last_seen": "2026-07-23T18:03:23Z",
    "first_banned": "2026-07-19T14:25:37Z"
   },
   {
@@ -706,7 +706,7 @@
    "tier": "credential",
    "bans": 7,
    "attempts": 15911,
-   "first_seen": "2026-06-23T17:02:49Z",
+   "first_seen": "2026-06-23T18:07:52Z",
    "last_seen": "2026-06-26T14:51:25Z",
    "first_banned": "2026-04-23T00:15:05Z"
   },
@@ -742,7 +742,7 @@
    "tier": "credential",
    "bans": 4,
    "attempts": 4933,
-   "first_seen": "2026-06-23T17:04:04Z",
+   "first_seen": "2026-06-23T18:23:58Z",
    "last_seen": "2026-07-05T05:28:30Z",
    "first_banned": "2026-06-29T15:55:40Z"
   },
@@ -1183,8 +1183,8 @@
    "tier": "scanner",
    "bans": 0,
    "attempts": 1495,
-   "first_seen": "2026-06-23T17:09:20Z",
-   "last_seen": "2026-07-23T16:32:33Z",
+   "first_seen": "2026-06-23T18:24:52Z",
+   "last_seen": "2026-07-23T17:49:35Z",
    "first_banned": null
   },
   {
@@ -1255,7 +1255,7 @@
    "tier": "credential",
    "bans": 4,
    "attempts": 854,
-   "first_seen": "2026-06-23T17:03:44Z",
+   "first_seen": "2026-06-23T19:58:09Z",
    "last_seen": "2026-06-27T07:16:53Z",
    "first_banned": "2026-06-29T15:55:39Z"
   },
@@ -1399,8 +1399,8 @@
    "tier": "credential",
    "bans": 4,
    "attempts": 8669,
-   "first_seen": "2026-06-23T17:12:43Z",
-   "last_seen": "2026-07-23T15:27:10Z",
+   "first_seen": "2026-06-23T18:22:24Z",
+   "last_seen": "2026-07-23T17:28:07Z",
    "first_banned": "2026-06-18T20:06:11Z"
   },
   {
@@ -1418,7 +1418,7 @@
    "bans": 3,
    "attempts": 1253,
    "first_seen": "2026-07-01T15:32:54Z",
-   "last_seen": "2026-07-23T16:23:30Z",
+   "last_seen": "2026-07-23T18:05:32Z",
    "first_banned": "2026-07-05T12:20:38Z"
   },
   {
@@ -1480,7 +1480,7 @@
    "tier": "credential",
    "bans": 4,
    "attempts": 3244,
-   "first_seen": "2026-06-23T17:15:57Z",
+   "first_seen": "2026-06-23T20:50:42Z",
    "last_seen": "2026-06-25T05:18:31Z",
    "first_banned": "2026-06-29T15:55:39Z"
   },
@@ -1625,7 +1625,7 @@
    "bans": 4,
    "attempts": 5370,
    "first_seen": "2026-07-16T03:36:07Z",
-   "last_seen": "2026-07-23T08:43:16Z",
+   "last_seen": "2026-07-23T17:40:41Z",
    "first_banned": "2026-06-18T20:06:16Z"
   },
   {
