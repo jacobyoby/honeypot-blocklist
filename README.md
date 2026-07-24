@@ -99,7 +99,7 @@ tops out around 600 events, the scanner cluster starts near 1,350.
 
 ## Fields
 
-`ip`, `tier`, `bans`, `attempts`, `first_seen`, `last_seen`, `first_banned`.
+`ip`, `tier`, `bans`, `attempts`, `first_seen`, `last_seen`, `first_banned`, `asn`.
 
 `attempts` is lifetime credential attempts for credential-tier entries, and
 in-window connection events for scanner-tier ones. `bans` counts credential-tier

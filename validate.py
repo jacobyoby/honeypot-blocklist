@@ -29,7 +29,7 @@ REQUIRED_ENTRY = {"ip", "tier", "bans", "attempts", "first_seen", "last_seen"}
 # so this order is permanent: append on the right, never insert or reorder.
 # Keep in sync with CSV_COLUMNS in gen_feed.py.
 CSV_COLUMNS = ["ip", "tier", "bans", "attempts", "first_seen", "last_seen",
-               "first_banned"]
+               "first_banned", "asn"]
 
 errors = []
 warnings = []
