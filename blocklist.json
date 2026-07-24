@@ -10,10 +10,10 @@
   "scanner_min_events": 1000,
   "count": 176,
   "count_by_tier": {
-   "credential": 171,
-   "scanner": 5
+   "credential": 172,
+   "scanner": 4
   },
-  "updated": "2026-07-24T14:00:01Z",
+  "updated": "2026-07-24T15:00:02Z",
   "update_frequency": "hourly",
   "license": "CC0-1.0",
   "field_notes": "tier: 'credential' or 'scanner'. For credential-tier entries, attempts = lifetime credential attempts and bans = ban cycles; for scanner-tier entries, attempts = connection events inside the current window and bans is always 0 \u2014 both tiers are firewalled on the sensor, but scanner ban cycles are tracked separately and are not counted in this field. first_seen and last_seen both describe observed attack activity inside the current window, so first_seen <= last_seen always holds. first_banned is bookkeeping \u2014 when this IP was first firewalled \u2014 and may fall outside the window or after last_seen; it is null for scanner-tier entries.",
@@ -1156,8 +1156,8 @@
    "tier": "scanner",
    "bans": 0,
    "attempts": 1496,
-   "first_seen": "2026-06-24T14:19:13Z",
-   "last_seen": "2026-07-24T13:53:49Z",
+   "first_seen": "2026-06-24T15:13:01Z",
+   "last_seen": "2026-07-24T14:46:54Z",
    "first_banned": null
   },
   {
@@ -1228,7 +1228,7 @@
    "tier": "credential",
    "bans": 4,
    "attempts": 854,
-   "first_seen": "2026-06-24T14:25:41Z",
+   "first_seen": "2026-06-24T16:40:10Z",
    "last_seen": "2026-06-27T07:16:53Z",
    "first_banned": "2026-06-29T15:55:39Z"
   },
@@ -1363,7 +1363,7 @@
    "tier": "credential",
    "bans": 4,
    "attempts": 8669,
-   "first_seen": "2026-06-24T14:30:16Z",
+   "first_seen": "2026-06-24T15:13:51Z",
    "last_seen": "2026-07-24T05:11:06Z",
    "first_banned": "2026-06-18T20:06:11Z"
   },
@@ -1567,12 +1567,12 @@
   },
   {
    "ip": "212.169.214.247",
-   "tier": "scanner",
-   "bans": 0,
-   "attempts": 3036,
+   "tier": "credential",
+   "bans": 1,
+   "attempts": 72,
    "first_seen": "2026-07-24T04:27:05Z",
-   "last_seen": "2026-07-24T13:57:02Z",
-   "first_banned": null
+   "last_seen": "2026-07-24T14:56:54Z",
+   "first_banned": "2026-07-24T14:50:17Z"
   },
   {
    "ip": "213.209.159.115",
