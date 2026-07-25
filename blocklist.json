@@ -8,12 +8,12 @@
   "inclusion_criteria": "two tiers, both requiring real attack activity within the last 30 days: 'credential' = honeypot-confirmed repeated credential-attack attempts (50+); 'scanner' = sustained credential-less abuse, 1000+ connection/probe events in-window",
   "window_days": 30,
   "scanner_min_events": 1000,
-  "count": 173,
+  "count": 172,
   "count_by_tier": {
-   "credential": 169,
+   "credential": 168,
    "scanner": 4
   },
-  "updated": "2026-07-25T06:00:02Z",
+  "updated": "2026-07-25T07:00:02Z",
   "update_frequency": "hourly",
   "license": "CC0-1.0",
   "field_notes": "tier: 'credential' or 'scanner'. For credential-tier entries, attempts = lifetime credential attempts and bans = ban cycles; for scanner-tier entries, attempts = connection events inside the current window and bans is always 0 \u2014 both tiers are firewalled on the sensor, but scanner ban cycles are tracked separately and are not counted in this field. first_seen and last_seen both describe observed attack activity inside the current window, so first_seen <= last_seen always holds. first_banned is bookkeeping \u2014 when this IP was first firewalled \u2014 and may fall outside the window or after last_seen; it is null for scanner-tier entries.",
@@ -247,16 +247,6 @@
    "asn": "AS37963"
   },
   {
-   "ip": "39.173.18.65",
-   "tier": "credential",
-   "bans": 4,
-   "attempts": 1278,
-   "first_seen": "2026-06-25T06:00:02Z",
-   "last_seen": "2026-06-25T06:02:05Z",
-   "first_banned": "2026-06-18T20:06:17Z",
-   "asn": "AS56041"
-  },
-  {
    "ip": "39.185.50.192",
    "tier": "credential",
    "bans": 4,
@@ -421,7 +411,7 @@
    "tier": "credential",
    "bans": 4,
    "attempts": 128588,
-   "first_seen": "2026-06-25T06:00:04Z",
+   "first_seen": "2026-06-25T07:00:02Z",
    "last_seen": "2026-06-26T00:49:16Z",
    "first_banned": "2026-06-29T15:55:40Z",
    "asn": "AS37963"
@@ -542,7 +532,7 @@
    "bans": 8,
    "attempts": 1334,
    "first_seen": "2026-07-18T10:18:05Z",
-   "last_seen": "2026-07-18T10:18:05Z",
+   "last_seen": "2026-07-25T06:16:17Z",
    "first_banned": "2026-03-19T21:40:05Z",
    "asn": "AS401626"
   },
@@ -831,7 +821,7 @@
    "tier": "credential",
    "bans": 4,
    "attempts": 4933,
-   "first_seen": "2026-06-25T06:05:58Z",
+   "first_seen": "2026-06-25T08:08:35Z",
    "last_seen": "2026-07-05T05:28:30Z",
    "first_banned": "2026-06-29T15:55:40Z",
    "asn": "AS61283"
@@ -912,7 +902,7 @@
    "bans": 2,
    "attempts": 280,
    "first_seen": "2026-07-12T01:18:49Z",
-   "last_seen": "2026-07-24T18:03:38Z",
+   "last_seen": "2026-07-25T06:24:10Z",
    "first_banned": "2026-07-19T10:25:38Z",
    "asn": "AS219502"
   },
@@ -1281,8 +1271,8 @@
    "tier": "scanner",
    "bans": 0,
    "attempts": 1496,
-   "first_seen": "2026-06-25T06:21:41Z",
-   "last_seen": "2026-07-25T05:48:37Z",
+   "first_seen": "2026-06-25T07:13:24Z",
+   "last_seen": "2026-07-25T06:40:38Z",
    "first_banned": null,
    "asn": "AS45090"
   },
@@ -1501,7 +1491,7 @@
    "tier": "credential",
    "bans": 4,
    "attempts": 8669,
-   "first_seen": "2026-06-25T06:51:32Z",
+   "first_seen": "2026-06-25T07:20:42Z",
    "last_seen": "2026-07-25T05:44:04Z",
    "first_banned": "2026-06-18T20:06:11Z",
    "asn": "AS17139"
@@ -1522,7 +1512,7 @@
    "bans": 3,
    "attempts": 1253,
    "first_seen": "2026-07-01T15:32:54Z",
-   "last_seen": "2026-07-25T05:20:11Z",
+   "last_seen": "2026-07-25T06:20:08Z",
    "first_banned": "2026-07-05T12:20:38Z",
    "asn": "AS154383"
   },
@@ -1531,7 +1521,7 @@
    "tier": "credential",
    "bans": 4,
    "attempts": 506,
-   "first_seen": "2026-06-25T06:07:20Z",
+   "first_seen": "2026-06-25T08:09:02Z",
    "last_seen": "2026-07-02T18:09:33Z",
    "first_banned": "2026-06-29T15:55:39Z",
    "asn": "AS263418"
