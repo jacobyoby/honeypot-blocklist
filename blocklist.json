@@ -8,12 +8,12 @@
   "inclusion_criteria": "two tiers, both requiring real attack activity within the last 30 days: 'credential' = honeypot-confirmed repeated credential-attack attempts (50+); 'scanner' = sustained credential-less abuse, 1000+ connection/probe events in-window",
   "window_days": 30,
   "scanner_min_events": 1000,
-  "count": 175,
+  "count": 176,
   "count_by_tier": {
-   "credential": 171,
+   "credential": 172,
    "scanner": 4
   },
-  "updated": "2026-07-31T04:00:01Z",
+  "updated": "2026-07-31T05:00:02Z",
   "update_frequency": "hourly",
   "license": "CC0-1.0",
   "field_notes": "tier: 'credential' or 'scanner'. For credential-tier entries, attempts = lifetime credential attempts and bans = ban cycles; for scanner-tier entries, attempts = connection events inside the current window and bans is always 0 \u2014 both tiers are firewalled on the sensor, but scanner ban cycles are tracked separately and are not counted in this field. first_seen and last_seen both describe observed attack activity inside the current window, so first_seen <= last_seen always holds. first_banned is bookkeeping \u2014 when this IP was first firewalled \u2014 and may fall outside the window or after last_seen; it is null for scanner-tier entries.",
@@ -272,7 +272,7 @@
    "bans": 2,
    "attempts": 137,
    "first_seen": "2026-07-27T14:20:57Z",
-   "last_seen": "2026-07-31T03:56:55Z",
+   "last_seen": "2026-07-31T03:59:08Z",
    "first_banned": "2026-07-27T14:40:25Z",
    "asn": "AS37963"
   },
@@ -702,7 +702,7 @@
    "bans": 4,
    "attempts": 5103,
    "first_seen": "2026-07-31T02:11:08Z",
-   "last_seen": "2026-07-31T03:56:56Z",
+   "last_seen": "2026-07-31T04:56:59Z",
    "first_banned": "2026-06-18T20:06:20Z",
    "asn": "AS398101"
   },
@@ -831,7 +831,7 @@
    "tier": "credential",
    "bans": 5,
    "attempts": 5064,
-   "first_seen": "2026-07-01T04:39:46Z",
+   "first_seen": "2026-07-01T05:29:16Z",
    "last_seen": "2026-07-05T05:28:30Z",
    "first_banned": "2026-06-29T15:55:40Z",
    "asn": "AS61283"
@@ -1217,6 +1217,16 @@
    "asn": "AS9808"
   },
   {
+   "ip": "117.252.86.216",
+   "tier": "credential",
+   "bans": 1,
+   "attempts": 66,
+   "first_seen": "2026-07-31T04:11:08Z",
+   "last_seen": "2026-07-31T04:30:52Z",
+   "first_banned": "2026-07-31T04:25:07Z",
+   "asn": "AS9829"
+  },
+  {
    "ip": "118.39.50.107",
    "tier": "credential",
    "bans": 2,
@@ -1340,9 +1350,9 @@
    "ip": "139.199.80.137",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1539,
+   "attempts": 1541,
    "first_seen": "2026-07-02T14:15:18Z",
-   "last_seen": "2026-07-31T03:48:53Z",
+   "last_seen": "2026-07-31T04:40:21Z",
    "first_banned": null,
    "asn": "AS45090"
   },
@@ -1531,8 +1541,8 @@
    "tier": "credential",
    "bans": 5,
    "attempts": 10074,
-   "first_seen": "2026-07-01T04:35:21Z",
-   "last_seen": "2026-07-31T03:41:36Z",
+   "first_seen": "2026-07-01T05:53:40Z",
+   "last_seen": "2026-07-31T04:51:40Z",
    "first_banned": "2026-06-18T20:06:11Z",
    "asn": "AS17139"
   },
@@ -1552,7 +1562,7 @@
    "bans": 4,
    "attempts": 2199,
    "first_seen": "2026-07-01T15:32:54Z",
-   "last_seen": "2026-07-31T03:41:38Z",
+   "last_seen": "2026-07-31T04:43:35Z",
    "first_banned": "2026-07-05T12:20:38Z",
    "asn": "AS154383"
   },
@@ -1571,7 +1581,7 @@
    "tier": "credential",
    "bans": 4,
    "attempts": 506,
-   "first_seen": "2026-07-01T04:13:48Z",
+   "first_seen": "2026-07-01T06:01:55Z",
    "last_seen": "2026-07-02T18:09:33Z",
    "first_banned": "2026-06-29T15:55:39Z",
    "asn": "AS263418"
@@ -1701,7 +1711,7 @@
    "tier": "credential",
    "bans": 5,
    "attempts": 496,
-   "first_seen": "2026-07-01T04:14:01Z",
+   "first_seen": "2026-07-01T06:14:44Z",
    "last_seen": "2026-07-21T08:53:55Z",
    "first_banned": "2026-07-02T06:25:39Z",
    "asn": "AS51396"
@@ -1742,7 +1752,7 @@
    "bans": 5,
    "attempts": 5545,
    "first_seen": "2026-07-16T03:36:07Z",
-   "last_seen": "2026-07-30T20:26:17Z",
+   "last_seen": "2026-07-31T04:26:42Z",
    "first_banned": "2026-06-18T20:06:16Z",
    "asn": "AS208137"
   },
