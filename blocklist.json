@@ -13,7 +13,7 @@
    "credential": 165,
    "scanner": 6
   },
-  "updated": "2026-08-02T08:00:02Z",
+  "updated": "2026-08-02T09:00:01Z",
   "update_frequency": "hourly",
   "license": "CC0-1.0",
   "field_notes": "tier: 'credential' or 'scanner'. For credential-tier entries, attempts = lifetime credential attempts and bans = ban cycles; for scanner-tier entries, attempts = connection events inside the current window and bans is always 0 \u2014 both tiers are firewalled on the sensor, but scanner ban cycles are tracked separately and are not counted in this field. first_seen and last_seen both describe observed attack activity inside the current window, so first_seen <= last_seen always holds. first_banned is bookkeeping \u2014 when this IP was first firewalled \u2014 and may fall outside the window or after last_seen; it is null for scanner-tier entries.",
@@ -90,9 +90,9 @@
    "ip": "8.39.235.18",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1596,
+   "attempts": 1634,
    "first_seen": "2026-07-21T16:41:55Z",
-   "last_seen": "2026-08-02T07:56:15Z",
+   "last_seen": "2026-08-02T08:55:40Z",
    "first_banned": null,
    "asn": "AS397423"
   },
@@ -1311,8 +1311,8 @@
    "tier": "scanner",
    "bans": 0,
    "attempts": 1599,
-   "first_seen": "2026-07-03T08:23:02Z",
-   "last_seen": "2026-08-02T07:49:45Z",
+   "first_seen": "2026-07-03T09:12:24Z",
+   "last_seen": "2026-08-02T08:42:44Z",
    "first_banned": null,
    "asn": "AS45090"
   },
