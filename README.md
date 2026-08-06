@@ -104,11 +104,21 @@ tops out around 600 events, the scanner cluster starts near 1,350.
 `attempts` is lifetime credential attempts for credential-tier entries, and
 in-window connection events for scanner-tier ones. `bans` counts credential-tier
 ban cycles; it is always `0` for scanner-tier entries because their ban cycles
-are tracked separately — **both tiers are firewalled on the sensor.**
+are tracked separately — **both tiers are ban-listed and, since 2026-08-06,
+firewalled on the sensor.**
+
+> **Enforcement note (2026-08-06).** Ban rules were installed in the host's
+> `INPUT` chain, but the sensors run in containers whose published ports
+> traverse `DOCKER-USER` instead, so listed addresses were observed rather than
+> blocked. Rules now sit in both chains. Entries with `first_banned` before
+> 2026-08-06 were listed on the same criteria but were not actually filtered, so
+> `attempts` for those addresses keeps rising after `first_banned`. Expect
+> published volume to step down from this date as repeat traffic is dropped
+> rather than recorded.
 
 `first_seen` and `last_seen` are both *observations* — attack activity inside
 the current window — so `first_seen <= last_seen` always holds. `first_banned`
-is *bookkeeping*: when the address was first firewalled. It may predate the
+is *bookkeeping*: when the address was first ban-listed. It may predate the
 window or fall after `last_seen`, and is `null` for scanner-tier entries. Don't
 use it to reason about recency.
 
