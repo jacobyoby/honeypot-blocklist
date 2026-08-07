@@ -104,17 +104,21 @@ tops out around 600 events, the scanner cluster starts near 1,350.
 `attempts` is lifetime credential attempts for credential-tier entries, and
 in-window connection events for scanner-tier ones. `bans` counts credential-tier
 ban cycles; it is always `0` for scanner-tier entries because their ban cycles
-are tracked separately — **both tiers are ban-listed and, since 2026-08-06,
-firewalled on the sensor.**
+are tracked separately — **both tiers are ban-listed and filtered at the host;
+the sensors themselves deliberately remain reachable.**
 
-> **Enforcement note (2026-08-06).** Ban rules were installed in the host's
-> `INPUT` chain, but the sensors run in containers whose published ports
-> traverse `DOCKER-USER` instead, so listed addresses were observed rather than
-> blocked. Rules now sit in both chains. Entries with `first_banned` before
-> 2026-08-06 were listed on the same criteria but were not actually filtered, so
-> `attempts` for those addresses keeps rising after `first_banned`. Expect
-> published volume to step down from this date as repeat traffic is dropped
-> rather than recorded.
+> **Enforcement note (2026-08-06).** Ban rules live in the host's `INPUT` chain.
+> The sensors run in containers whose published ports traverse `DOCKER-USER`,
+> so listed addresses still reach the sensors. That gap was measured and then
+> kept **on purpose**: 96.7% of this sensor's telnet credential volume
+> originates from already-listed addresses, so filtering at the sensor would
+> suppress the very collection this feed is built from. A honeypot that drops
+> the addresses it exists to observe stops observing. Host services are
+> filtered; the sensors are not.
+>
+> Consequently `attempts` for a listed address keeps rising after
+> `first_banned`. That is by design, not a bookkeeping error — do not read
+> `first_banned` as "traffic stopped".
 
 `first_seen` and `last_seen` are both *observations* — attack activity inside
 the current window — so `first_seen <= last_seen` always holds. `first_banned`
