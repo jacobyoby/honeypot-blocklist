@@ -11,12 +11,31 @@ Exit non-zero on any failure. Usage: python3 validate.py [directory]
 """
 
 import csv
+import datetime
 import ipaddress
+import re
 import json
 import os
 import sys
 
 VALID_TIERS = {"credential", "scanner"}
+
+# Timestamps are published as ISO-8601 UTC with a literal Z, e.g.
+# 2026-07-13T02:34:54Z. A shape regex alone is NOT enough: "2026-99-99T25:61:00Z"
+# matches it and also passes the string comparisons used for ordering, which is
+# the formatting-vs-validity gap flagged in the 2026-07-23 review. Parse it.
+ISO_UTC = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
+
+
+def bad_ts(value):
+    """Return a reason string if value is not a real ISO-8601 UTC instant."""
+    if not ISO_UTC.match(value):
+        return "is not ISO-8601 UTC (expected YYYY-MM-DDTHH:MM:SSZ)"
+    try:
+        datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
+    except ValueError as exc:
+        return f"is not a real date/time ({exc})"
+    return None
 REQUIRED_META = {
     "name", "description", "maintainer", "homepage", "contact",
     "inclusion_criteria", "window_days", "count", "count_by_tier",
@@ -90,6 +109,7 @@ def main():
         report()
 
     json_ips = set()
+    recidivists = []
     by_tier = {}
     for i, e in enumerate(entries):
         where = f"blocklist.json[{i}]"
@@ -115,8 +135,42 @@ def main():
         # because those are tracked in a separate table upstream.
         if e["tier"] == "scanner" and e["bans"] != 0:
             err(f"{where}: scanner-tier entry has bans={e['bans']}, expected 0")
+        # An empty timestamp slips through silently: the ordering check below is
+        # guarded on both fields being truthy, so "" passes every check. A
+        # consumer parsing first_seen for an age cutoff gets a ValueError, not a
+        # skip. Nothing currently trips this -- that is the point of asserting
+        # it before a generator change does.
+        for field in ("first_seen", "last_seen"):
+            if not e[field]:
+                err(f"{where}: {field} is empty")
+            else:
+                reason = bad_ts(e[field])
+                if reason:
+                    err(f"{where}: {field}={e[field]!r} {reason}")
         if e["first_seen"] and e["last_seen"] and e["first_seen"] > e["last_seen"]:
             err(f"{where}: first_seen {e['first_seen']} is after last_seen {e['last_seen']}")
+        # first_banned pairs with the ban counter: an entry never banned has
+        # nothing to stamp, one that was banned must say when. Empty
+        # first_banned on scanner-tier rows is correct, not missing data.
+        if e["bans"] == 0 and e.get("first_banned"):
+            err(f"{where}: bans=0 but first_banned={e['first_banned']!r}")
+        if e["bans"] > 0 and not e.get("first_banned"):
+            err(f"{where}: bans={e['bans']} but first_banned is empty")
+        if e.get("first_banned"):
+            reason = bad_ts(e["first_banned"])
+            if reason:
+                err(f"{where}: first_banned={e['first_banned']!r} {reason}")
+        # NOT an error: first_banned routinely predates first_seen, because the
+        # columns count different lifetimes -- first_banned is all-time ban
+        # history, first_seen is the current observation window. README says so.
+        # Warn only, so a generator change that inverts far more than usual shows.
+        if e.get("first_banned") and e["first_seen"] and e["first_banned"] < e["first_seen"]:
+            recidivists.append(str(addr))
+
+    if recidivists:
+        warn(f"{len(recidivists)} of {len(entries)} entries have first_banned "
+             f"before first_seen (expected: see the column contract in "
+             f"README.md). Sample: {recidivists[:3]}")
 
     # ---- meta counts must describe the payload ----
     if meta.get("count") != len(entries):
@@ -138,6 +192,7 @@ def main():
 
     # ---- CSV: header + rows ----
     csv_ips = set()
+    csv_rows = {}
     with open(cpath, newline="") as f:
         reader = csv.DictReader(f)
         if reader.fieldnames != CSV_COLUMNS:
@@ -150,6 +205,23 @@ def main():
                     csv_ips.add(row["ip"])
                 if row.get("tier") not in VALID_TIERS:
                     err(f"blocklist.csv:{n}: unknown tier {row.get('tier')!r}")
+                # The JSON is authoritative, but the CSV is what most consumers
+                # actually parse -- so it needs the same field checks, not just
+                # an IP/tier glance. Without this a generator that emits a good
+                # JSON and a bad CSV passes CI clean.
+                where = f"blocklist.csv:{n}"
+                for field in ("first_seen", "last_seen"):
+                    if not row.get(field):
+                        err(f"{where}: {field} is empty")
+                    else:
+                        reason = bad_ts(row[field])
+                        if reason:
+                            err(f"{where}: {field}={row[field]!r} {reason}")
+                if row.get("first_banned"):
+                    reason = bad_ts(row["first_banned"])
+                    if reason:
+                        err(f"{where}: first_banned={row['first_banned']!r} {reason}")
+                csv_rows[row["ip"]] = row
 
     # ---- header-less CSV for MISP / OpenCTI ----
     # These consumers address columns positionally and never read a header, so
@@ -191,6 +263,27 @@ def main():
         only_j, only_c = sorted(json_ips - csv_ips), sorted(csv_ips - json_ips)
         err(f"json/csv disagree: {len(only_j)} only in json {only_j[:3]}, "
             f"{len(only_c)} only in csv {only_c[:3]}")
+
+    # ---- the formats must agree on VALUES, not just on membership ----
+    # Matching IP sets says the same addresses are listed; it says nothing about
+    # whether they carry the same dates and counters. A CSV-only corruption used
+    # to pass every check above.
+    shared = ("tier", "bans", "attempts", "first_seen", "last_seen",
+              "first_banned")
+    mismatches = []
+    for e in entries:
+        row = csv_rows.get(e["ip"])
+        if row is None:
+            continue
+        for field in shared:
+            j, c = e.get(field), row.get(field)
+            j = "" if j is None else str(j)
+            c = "" if c is None else str(c)
+            if j != c:
+                mismatches.append(f"{e['ip']}.{field}: json={j!r} csv={c!r}")
+    if mismatches:
+        err(f"json and csv disagree on {len(mismatches)} field value(s): "
+            f"{mismatches[:3]}")
 
     # ---- README should not advertise a count it no longer ships ----
     rpath = os.path.join(d, "README.md")

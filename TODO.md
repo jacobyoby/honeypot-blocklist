@@ -5,6 +5,31 @@ host (`~/honeypot-stats`) and has its own TODO.
 
 ## High
 
+- [ ] **Harden `validate.py` — it can't stop a bad publish** (Codex review
+      2026-07-23; current published data verified clean, this is guardrail work).
+      The validator is the only gate between the loam generator and consumers'
+      firewalls, and it under-checks:
+  - [ ] Enforce the README's inclusion thresholds (min attempts/bans per tier).
+        Today a bug emitting `8.8.8.8` credential-tier with `attempts: 1` passes
+        CI and firewall-blocks a public resolver. *(High)*
+  - [ ] Reject global IPv6 (or add an explicit v6 contract) — the documented
+        ipset/iptables flow is IPv4-only, so a v6 row breaks consumers' loaders.
+  - [ ] Reject CSV formula-injection cells (`=`,`+`,`-`,`@` leading) — a
+        `=HYPERLINK(...)` in `first_banned` passes today.
+  - [ ] Enforce strict CSV row width (DictReader silently accepts shifted cells
+        from an unquoted comma).
+  - [ ] Require `blocklist.misp.csv` to exist (currently optional despite being
+        the documented MISP/OpenCTI feed).
+  - [x] Parse timestamps as real dates (`2026-99-99` passes string compare).
+        *Done: `bad_ts()` parses with `strptime`; shape regex alone let
+        `2026-99-99` and `2026-02-30` through. Also pairs `bans` with
+        `first_banned`, and cross-checks json/csv field VALUES — a
+        CSV-only corruption previously passed CI clean.*
+  - [ ] `scripts/overlap.py`: measure the local checkout, not the deployed feed,
+        so novelty claims aren't computed from stale data.
+  - Full findings: Codex review, 2026-07-23. Generator-side (can it emit a bad
+    row at all?) is aardvark's `~/honeypot-stats` on loam — flagged on the bus.
+
 - [ ] **Automate the snapshot.** This repo went two days stale and
       methodologically obsolete because nothing syncs it — it was updated by
       hand once, at initial release. Either add an hourly job on the sensor
