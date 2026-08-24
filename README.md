@@ -126,6 +126,21 @@ is *bookkeeping*: when the address was first ban-listed. It may predate the
 window or fall after `last_seen`, and is `null` for scanner-tier entries. Don't
 use it to reason about recency.
 
+## Schema version
+
+`meta.schema_version` is `MAJOR.MINOR`, currently **1.0**.
+
+Column order is load-bearing: `blocklist.misp.csv` is header-less and MISP and
+OpenCTI address its columns *positionally*, so a reordered feed does not fail
+for them — it silently lands every field in the wrong place. The version is how
+a consumer notices before that happens.
+
+- **MINOR** bump — a column was appended. Existing readers keep working.
+- **MAJOR** bump — a column was renamed, removed, or reordered. Pin on MAJOR and
+  refuse a feed whose MAJOR you do not recognise, rather than parsing it anyway.
+
+`validate.py` fails CI on an unrecognised MAJOR and warns on MINOR drift.
+
 ## Usage
 
 See [`configs/fail2ban-example.md`](configs/fail2ban-example.md). Point your

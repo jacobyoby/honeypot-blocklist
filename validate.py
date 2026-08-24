@@ -26,6 +26,14 @@ VALID_TIERS = {"credential", "scanner"}
 # the formatting-vs-validity gap flagged in the 2026-07-23 review. Parse it.
 ISO_UTC = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
 
+# The schema consumers are coding against right now. It is NOT in REQUIRED_META
+# yet: the generator on loam does not emit it, and promoting it today would fail
+# every hourly commit until that ships. Sequence is warn -> generator emits ->
+# require. Bump MINOR when a column is appended (consumers keep working), MAJOR
+# when one is renamed, removed or reordered (they do not).
+SCHEMA_VERSION = "1.0"
+SEMVER = re.compile(r"^\d+\.\d+$")
+
 
 def bad_ts(value):
     """Return a reason string if value is not a real ISO-8601 UTC instant."""
@@ -99,6 +107,26 @@ def main():
         report()
 
     meta, entries = data["meta"], data["ips"]
+
+    # ---- schema_version: the field that lets a consumer refuse a feed ----
+    # Column order is load-bearing for MISP/OpenCTI, which address positionally.
+    # Without a version there is no way for a consumer to notice the contract
+    # changed under it -- it just silently reads the wrong column.
+    sv = meta.get("schema_version")
+    if sv is None:
+        warn(f"meta.schema_version is absent; consumers cannot detect a "
+             f"contract change. Generator should emit {SCHEMA_VERSION!r}.")
+    elif not isinstance(sv, str) or not SEMVER.match(sv):
+        err(f"meta.schema_version={sv!r} is not MAJOR.MINOR")
+    elif sv.split(".")[0] != SCHEMA_VERSION.split(".")[0]:
+        err(f"meta.schema_version={sv!r} has a different MAJOR than the "
+            f"{SCHEMA_VERSION!r} this validator knows. A MAJOR bump means "
+            f"columns were renamed, removed or reordered -- update "
+            f"CSV_COLUMNS and SCHEMA_VERSION together, deliberately.")
+    elif sv != SCHEMA_VERSION:
+        warn(f"meta.schema_version={sv!r}, validator knows {SCHEMA_VERSION!r} "
+             f"(MINOR drift: a column was appended). Confirm CSV_COLUMNS "
+             f"matches what the generator now writes.")
 
     missing = REQUIRED_META - set(meta)
     if missing:
