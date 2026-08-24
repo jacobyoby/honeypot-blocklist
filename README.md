@@ -15,17 +15,18 @@ goes quiet.
 Because this one is **original sensor data**, not a re-aggregation. Every IP here
 hit *my* honeypot directly.
 
-**63.5% of the current list appears on no major public blocklist.** Measured
-2026-07-22 against the live 181-entry feed:
+**64.7% of the current list appears on no major public blocklist.** Re-measured
+2026-08-24 with `scripts/overlap.py` against the live 153-entry feed (previous
+measurement 2026-07-22, 181 entries, 63.5% novel — the headline has held):
 
-| List | Overlap |
-|---|---|
-| firehol_level3 | 19.9% |
-| blocklist_de | 14.4% |
-| firehol_level1 | 13.8% |
-| spamhaus_drop | 13.3% |
-| dshield | 1.7% |
-| **any of the above** | **36.5%** |
+| List | Overlap | 2026-07-22 |
+|---|---|---|
+| firehol_level1 | 22.2% | 13.8% |
+| spamhaus_drop | 22.2% | 13.3% |
+| firehol_level3 | 17.6% | 19.9% |
+| blocklist_de | 9.8% | 14.4% |
+| dshield | 0.0% | 1.7% |
+| **any of the above** | **35.3%** | **36.5%** |
 
 So roughly two thirds are attackers the big aggregates haven't listed. That's
 the point of a live sensor — and it's also the honest ceiling on this feed's
@@ -54,15 +55,21 @@ of SSH bruteforcers hammering hard. Because the list is per-IP, telnet
 dominates it.
 
 Comparing against other operators' honeypot feeds confirms it — overlap with
-dataplane.org's telnet feed is **45.3%**, against just **9.4%** for their SSH
-feed:
+dataplane.org's telnet feed is **33.3%**, against just **5.2%** for their SSH
+feed. The ratio is what matters and it has held across both measurements
+(~5x then, ~6x now):
 
-| Peer honeypot feed | Overlap |
-|---|---|
-| dataplane telnetlogin (telnet) | 45.3% |
-| dataplane sshpwauth (SSH) | 9.4% |
-| greensnow | 3.3% |
-| dataplane vncrfb (VNC) | 1.7% |
+| Peer honeypot feed | Overlap | 2026-07-22 |
+|---|---|---|
+| dataplane telnetlogin (telnet) | 33.3% | 45.3% |
+| dataplane vncrfb (VNC) | 12.4% | 1.7% |
+| greensnow | 6.5% | 3.3% |
+| dataplane sshpwauth (SSH) | 5.2% | 9.4% |
+| **any of the above** | **52.9%** | — |
+
+The one real mover is VNC: **1.7% to 12.4%**, a 7x rise in a month. The
+telnet-dominant conclusion below is unchanged, but VNC is no longer a rounding
+error in this feed's composition.
 
 **So: treat this as a telnet/IoT-botnet list that also catches SSH, not an SSH
 list.** If you are looking specifically for SSH bruteforcers, dataplane's
