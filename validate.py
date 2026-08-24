@@ -42,6 +42,29 @@ TIER_MIN_ATTEMPTS = {"credential": 50, "scanner": 1000}
 # consumer recipes updated in the same change.
 ALLOWED_IP_VERSIONS = {4}
 
+# README publishes statistical claims -- novelty vs aggregates, overlap with
+# peer honeypot feeds -- that justify this feed existing at all. They are
+# measured by scripts/overlap.py against the live feed, which makes 9 external
+# fetches and cannot run in hourly CI.
+# The failure this guards is not a wrong number, it is an UNNOTICED one: the
+# 2026-07-22 measurement sat on the front page for a month while the feed moved
+# from 181 entries to 153 and dataplane VNC overlap went 1.7% -> 12.4%.
+# So: the README states the size it was measured against, and this check warns
+# once the live feed has drifted far enough from that size for the published
+# claims to be describing a different list. Cheap, hermetic, no network.
+MEASURED_AT = re.compile(r"measured\s+(\d{4}-\d{2}-\d{2}).{0,120}?([\d,]+)-entry feed",
+                         re.IGNORECASE | re.DOTALL)
+# Drift tolerated before the published claims stop describing the live list.
+# CALIBRATED AGAINST THE ACTUAL INCIDENT, not chosen for looking reasonable:
+# the README went stale between a 181-entry and a 153-entry feed, which is
+# 15.5% drift. A 20% tolerance -- my first instinct -- would have sat silent
+# through the only event this check exists to catch, while dataplane VNC
+# overlap moved 1.7% -> 12.4% underneath it.
+# 10% fires on that case with margin and still tolerates the feed's ordinary
+# hourly breathing (it has moved 153-154 in a day). Tightening further would
+# alarm on normal churn, which is how a warning becomes wallpaper.
+CLAIM_DRIFT_TOLERANCE = 0.10
+
 # Cells whose first character makes a spreadsheet treat the value as a formula.
 # The feed is a CSV that people open in Excel/LibreOffice/Sheets; a cell
 # beginning =, +, - or @ is executed on open. Nothing legitimate in this feed
@@ -419,6 +442,25 @@ def main():
         if f"**{len(entries)} IPs**" not in readme:
             warn(f"README does not state the current count (**{len(entries)} IPs**) — "
                  "it drifted out of date once before")
+
+        # ---- published statistical claims must still describe this feed ----
+        m = MEASURED_AT.search(readme)
+        if not m:
+            warn("README does not record the date and feed size its overlap/"
+                 "novelty claims were measured against, so nothing can tell "
+                 "whether they still describe the published list. Expected a "
+                 "phrase like 'measured 2026-08-24 ... against the live "
+                 "153-entry feed'.")
+        else:
+            when, size = m.group(1), int(m.group(2).replace(",", ""))
+            drift = abs(len(entries) - size) / size if size else 1.0
+            if drift > CLAIM_DRIFT_TOLERANCE:
+                warn(f"README's overlap/novelty claims were measured {when} "
+                     f"against {size} entries; the feed is now {len(entries)} "
+                     f"({drift:.0%} drift, tolerance {CLAIM_DRIFT_TOLERANCE:.0%}). "
+                     f"Those figures are percentages OF the feed, so they now "
+                     f"describe a different list. Re-run "
+                     f"scripts/overlap.py and update README.")
 
     report()
 

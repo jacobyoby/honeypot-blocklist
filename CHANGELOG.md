@@ -6,6 +6,23 @@ Notable changes to the published blocklist and its methodology. Format follows
 Methodology changes affect who appears on the list, so they are treated as
 breaking and called out explicitly.
 
+## [2026-08-24] — the front-page claims are now guarded too
+
+### Added
+
+- `validate.py` warns when README's overlap/novelty claims were measured
+  against a feed size materially different from the one being published. Those
+  figures are percentages *of* the feed, so once it moves far enough they
+  describe a different list.
+
+  The tolerance is 10%, calibrated against the incident rather than chosen for
+  looking reasonable: the README actually went stale between a 181-entry and a
+  153-entry feed, which is 15.5% drift. A 20% tolerance would have sat silent
+  through the only event this check exists to catch.
+
+  Hermetic — no network in CI. `scripts/overlap.py` makes 9 external fetches and
+  stays a manual/scheduled run; this check only notices when it is overdue.
+
 ## [2026-08-24] — the validator can now stop a bad publish
 
 ### Added
