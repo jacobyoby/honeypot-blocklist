@@ -20,6 +20,39 @@ import sys
 
 VALID_TIERS = {"credential", "scanner"}
 
+# The README's own inclusion thresholds, enforced rather than merely advertised.
+# meta.inclusion_criteria states 'credential' = 50+ credential attempts and
+# 'scanner' = 1000+ connection events in-window. A generator that drops below
+# either publishes addresses the documented criteria do not justify, and the
+# only person who finds out is a consumer firewalling on it.
+# scanner's floor is read from meta.scanner_min_events when present so the
+# published criteria and the check cannot drift apart silently.
+TIER_MIN_ATTEMPTS = {"credential": 50, "scanner": 1000}
+
+# IPv6 contract, decided 2026-08-24 rather than left implicit.
+# The feed is IPv4-only. Nothing upstream has ever emitted a v6 address (0 of
+# 154 at time of writing), and every consumer surface assumes v4: the ipset and
+# iptables recipes create `family inet` sets, which REJECT a v6 address rather
+# than blocking it. Publishing a global v6 entry would therefore not be caught
+# by anyone -- it would land in a feed people already trust and be silently
+# dropped or error out at import.
+# So this is a hard error, not a warning: a v6 address reaching here means the
+# generator changed, and that change needs a designed v6 contract (a separate
+# file, or a family column) BEFORE it ships. Loosen this deliberately, with the
+# consumer recipes updated in the same change.
+ALLOWED_IP_VERSIONS = {4}
+
+# Cells whose first character makes a spreadsheet treat the value as a formula.
+# The feed is a CSV that people open in Excel/LibreOffice/Sheets; a cell
+# beginning =, +, - or @ is executed on open. Nothing legitimate in this feed
+# starts with one (IPs are digits, timestamps are digits, tiers are words,
+# counters are non-negative, ASNs are 'ASnnnn'), so any occurrence is either
+# corruption or an injection attempt and must stop the publish.
+FORMULA_PREFIXES = ("=", "+", "-", "@")
+# Leading control characters are the documented bypass: a cell starting with a
+# tab, CR or LF is stripped by the spreadsheet before the formula test.
+FORMULA_CONTROL = ("\t", "\r", "\n")
+
 # Timestamps are published as ISO-8601 UTC with a literal Z, e.g.
 # 2026-07-13T02:34:54Z. A shape regex alone is NOT enough: "2026-99-99T25:61:00Z"
 # matches it and also passes the string comparisons used for ordering, which is
@@ -83,7 +116,34 @@ def check_ip(raw, where):
     if not addr.is_global or addr.is_multicast or addr.is_reserved:
         err(f"{where}: non-global address published: {addr}")
         return None
+    if addr.version not in ALLOWED_IP_VERSIONS:
+        err(f"{where}: IPv{addr.version} address {addr} published, but this "
+            f"feed's contract is IPv{'/'.join(str(v) for v in sorted(ALLOWED_IP_VERSIONS))}"
+            f"-only. The ipset/iptables recipes create `family inet` sets, "
+            f"which reject a v6 address instead of blocking it -- consumers "
+            f"would silently not be protected. Design the v6 contract and "
+            f"update the recipes before relaxing ALLOWED_IP_VERSIONS.")
+        return None
     return addr
+
+
+def check_cell(value, where):
+    """Record an error if a published cell would execute in a spreadsheet."""
+    if value is None:
+        return
+    text = str(value)
+    if not text:
+        return
+    stripped = text.lstrip("".join(FORMULA_CONTROL))
+    if text[0] in FORMULA_CONTROL:
+        err(f"{where}: cell {text!r} begins with a control character; a "
+            f"spreadsheet strips it and then evaluates what follows")
+        return
+    if stripped.startswith(FORMULA_PREFIXES):
+        err(f"{where}: cell {text!r} begins with a formula character "
+            f"({stripped[0]!r}); this feed is opened in spreadsheets and the "
+            f"cell would be executed. Nothing legitimate in this feed starts "
+            f"with one.")
 
 
 def main():
@@ -163,6 +223,21 @@ def main():
         # because those are tracked in a separate table upstream.
         if e["tier"] == "scanner" and e["bans"] != 0:
             err(f"{where}: scanner-tier entry has bans={e['bans']}, expected 0")
+        # The README advertises a floor per tier; enforce it here so the
+        # published criteria describe the published data rather than an
+        # intention. scanner's floor comes from meta when the generator states
+        # it, so the two cannot drift.
+        floor = TIER_MIN_ATTEMPTS.get(e["tier"])
+        if e["tier"] == "scanner":
+            declared = meta.get("scanner_min_events")
+            if isinstance(declared, int) and declared > 0:
+                floor = declared
+        if floor is not None and isinstance(e["attempts"], int) and e["attempts"] < floor:
+            err(f"{where}: {e['tier']}-tier entry has attempts={e['attempts']}, "
+                f"below the documented inclusion threshold of {floor}. "
+                f"meta.inclusion_criteria promises this floor to every "
+                f"consumer -- publishing under it lists an address the stated "
+                f"criteria do not justify.")
         # An empty timestamp slips through silently: the ordering check below is
         # guarded on both fields being truthy, so "" passes every check. A
         # consumer parsing first_seen for an age cutoff gets a ValueError, not a
@@ -221,6 +296,22 @@ def main():
     # ---- CSV: header + rows ----
     csv_ips = set()
     csv_rows = {}
+    # Row width first, with a plain reader: DictReader silently tolerates a
+    # short or long row (missing keys become None, extras land under a None
+    # key), so a generator that shifts a column past the header count passes
+    # every downstream check while every value sits one place to the left.
+    with open(cpath, newline="") as f:
+        for n, raw in enumerate(csv.reader(f), 1):
+            if not raw:
+                continue
+            if len(raw) != len(CSV_COLUMNS):
+                err(f"blocklist.csv:{n}: {len(raw)} columns, expected "
+                    f"{len(CSV_COLUMNS)} ({','.join(CSV_COLUMNS)}). "
+                    f"DictReader would have accepted this silently.")
+            if n > 1:
+                for col, cell in zip(CSV_COLUMNS, raw):
+                    check_cell(cell, f"blocklist.csv:{n}.{col}")
+
     with open(cpath, newline="") as f:
         reader = csv.DictReader(f)
         if reader.fieldnames != CSV_COLUMNS:
@@ -271,6 +362,8 @@ def main():
                 err(f"blocklist.misp.csv:{n}: {len(row)} columns, "
                     f"expected {len(CSV_COLUMNS)} ({','.join(CSV_COLUMNS)})")
                 continue
+            for col, cell in zip(CSV_COLUMNS, row):
+                check_cell(cell, f"blocklist.misp.csv:{n}.{col}")
             if check_ip(row[0], f"blocklist.misp.csv:{n}"):
                 misp_ips.add(row[0])
             if row[1] not in VALID_TIERS:
@@ -279,8 +372,14 @@ def main():
             err(f"blocklist.misp.csv names a different set than blocklist.json "
                 f"({len(misp_ips)} vs {len(json_ips)})")
     else:
-        warn("blocklist.misp.csv missing — MISP/OpenCTI consumers have no "
-             "header-less variant to point at")
+        # Required, not optional: README and meta.formats both publish
+        # blocklist.misp.csv as THE feed URL for MISP and OpenCTI. A publish
+        # without it takes those consumers offline while the other three
+        # formats look healthy, and a warning is exactly the signal that gets
+        # scrolled past in a green CI run.
+        err("blocklist.misp.csv is missing. It is the documented MISP/OpenCTI "
+            "feed (README.md and meta.formats.csv_headerless both point at "
+            "it); publishing without it silently breaks those consumers.")
 
     # ---- the three formats must name the same set ----
     if json_ips != txt_ips:

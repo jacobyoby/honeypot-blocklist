@@ -5,20 +5,20 @@ host (`~/honeypot-stats`) and has its own TODO.
 
 ## High
 
-- [ ] **Harden `validate.py` — it can't stop a bad publish** (Codex review
+- [x] **Harden `validate.py` — it can't stop a bad publish** (Codex review
       2026-07-23; current published data verified clean, this is guardrail work).
       The validator is the only gate between the loam generator and consumers'
       firewalls, and it under-checks:
-  - [ ] Enforce the README's inclusion thresholds (min attempts/bans per tier).
+  - [x] Enforce the README's inclusion thresholds (min attempts/bans per tier).
         Today a bug emitting `8.8.8.8` credential-tier with `attempts: 1` passes
         CI and firewall-blocks a public resolver. *(High)*
-  - [ ] Reject global IPv6 (or add an explicit v6 contract) — the documented
+  - [x] Reject global IPv6 (or add an explicit v6 contract) — the documented
         ipset/iptables flow is IPv4-only, so a v6 row breaks consumers' loaders.
-  - [ ] Reject CSV formula-injection cells (`=`,`+`,`-`,`@` leading) — a
+  - [x] Reject CSV formula-injection cells (`=`,`+`,`-`,`@` leading) — a
         `=HYPERLINK(...)` in `first_banned` passes today.
-  - [ ] Enforce strict CSV row width (DictReader silently accepts shifted cells
+  - [x] Enforce strict CSV row width (DictReader silently accepts shifted cells
         from an unquoted comma).
-  - [ ] Require `blocklist.misp.csv` to exist (STILL OPEN, confirmed
+  - [x] Require `blocklist.misp.csv` to exist (STILL OPEN, confirmed
         2026-08-23: `validate.py:261` guards the whole block behind
         `if os.path.exists(mpath)`, so a run that never wrote it passes.
         One-line fix.) Currently optional despite being

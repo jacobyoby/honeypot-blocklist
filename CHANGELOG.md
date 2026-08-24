@@ -6,6 +6,44 @@ Notable changes to the published blocklist and its methodology. Format follows
 Methodology changes affect who appears on the list, so they are treated as
 breaking and called out explicitly.
 
+## [2026-08-24] — the validator can now stop a bad publish
+
+### Added
+
+- `validate.py` enforces the README's own inclusion thresholds. A credential-tier
+  entry below 50 attempts, or a scanner-tier entry below `meta.scanner_min_events`
+  (1000), now fails the publish. Previously `meta.inclusion_criteria` promised a
+  floor that nothing checked — a generator bug emitting a public resolver with
+  `attempts: 1` would have passed CI and reached consumers' firewalls.
+- Strict CSV row width on `blocklist.csv`. `DictReader` silently tolerates a
+  shifted row (missing keys become `None`, extras land under a `None` key), so a
+  column shift from one unquoted comma passed every downstream check with every
+  value one place to the left. Checked with a plain reader before parsing.
+- Formula-injection rejection on every published cell of `blocklist.csv` and
+  `blocklist.misp.csv`. A cell beginning `=`, `+`, `-` or `@` executes when the
+  feed is opened in Excel, LibreOffice or Sheets. Leading tab/CR/LF — the
+  documented bypass, since the spreadsheet strips them before evaluating — is
+  rejected too.
+
+### Changed
+
+- `blocklist.misp.csv` is now **required**, not optional. README and
+  `meta.formats.csv_headerless` both publish it as the MISP/OpenCTI feed URL, but
+  the validator guarded the entire block behind an existence check, so a run that
+  never wrote it passed clean while those consumers went offline.
+
+### Contract
+
+- **The feed is IPv4-only, stated explicitly for the first time.** A global IPv6
+  address now fails validation. This was already true of the data (0 of 154
+  entries) but was never a promise: the published `ipset`/`iptables` recipes
+  create `family inet` sets, which *reject* a v6 address rather than blocking it,
+  so a v6 row would have left consumers unprotected inside a feed they trust.
+  Relaxing this requires updating the consumer recipes in the same change.
+
+All five checks were fault-injected in both directions before shipping: each
+rejects its defect, and an untouched copy of the live feed still validates clean.
+
 ## [2026-07-22] — composition measured
 
 ### Added

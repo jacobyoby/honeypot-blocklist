@@ -101,6 +101,14 @@ tops out around 600 events, the scanner cluster starts near 1,350.
 
 `ip`, `tier`, `bans`, `attempts`, `first_seen`, `last_seen`, `first_banned`, `asn`.
 
+**This feed is IPv4-only.** Every address published is a global IPv4 address,
+and `validate.py` refuses to publish anything else. This is a contract, not an
+accident of the data: the `ipset`/`iptables` recipes below create `family inet`
+sets, which reject an IPv6 address rather than blocking it — a v6 entry would
+land in a feed you already trust and silently leave you unprotected. If the
+sensors ever observe v6 worth publishing, it will arrive as a deliberate change
+with the consumer recipes updated alongside it, not as a surprise row.
+
 `attempts` is lifetime credential attempts for credential-tier entries, and
 in-window connection events for scanner-tier ones. `bans` counts credential-tier
 ban cycles; it is always `0` for scanner-tier entries because their ban cycles
