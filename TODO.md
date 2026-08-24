@@ -18,7 +18,10 @@ host (`~/honeypot-stats`) and has its own TODO.
         `=HYPERLINK(...)` in `first_banned` passes today.
   - [ ] Enforce strict CSV row width (DictReader silently accepts shifted cells
         from an unquoted comma).
-  - [ ] Require `blocklist.misp.csv` to exist (currently optional despite being
+  - [ ] Require `blocklist.misp.csv` to exist (STILL OPEN, confirmed
+        2026-08-23: `validate.py:261` guards the whole block behind
+        `if os.path.exists(mpath)`, so a run that never wrote it passes.
+        One-line fix.) Currently optional despite being
         the documented MISP/OpenCTI feed).
   - [x] Parse timestamps as real dates (`2026-99-99` passes string compare).
         *Done: `bad_ts()` parses with `strptime`; shape regex alone let
@@ -30,27 +33,28 @@ host (`~/honeypot-stats`) and has its own TODO.
   - Full findings: Codex review, 2026-07-23. Generator-side (can it emit a bad
     row at all?) is aardvark's `~/honeypot-stats` on loam — flagged on the bus.
 
-- [ ] **Automate the snapshot.** This repo went two days stale and
-      methodologically obsolete because nothing syncs it — it was updated by
-      hand once, at initial release. Either add an hourly job on the sensor
-      that commits `blocklist.{txt,json,csv}` and pushes, or strip the data
-      files entirely and leave a pointer to <https://jacobrakai.org/feed/>.
-      Until one of those happens, assume this repo is stale.
+- [x] ~~**Automate the snapshot.**~~ Done 2026-08-23: the repo now receives
+      hourly `Feed snapshot <ts> (N IPs)` commits, latest
+      2026-08-23T23:00:01Z. The hand-updated-once state this described is
+      over; the sensor job commits and pushes.
 
-- [ ] **Say how stale a snapshot is, in the files themselves.** Consumers
-      pulling `raw.githubusercontent.com` have no way to tell they're getting a
-      snapshot rather than the live feed. The `updated` timestamp is in the
-      header, but nothing warns that the repo copy lags the canonical one.
+- [x] ~~**Say how stale a snapshot is, in the files themselves.**~~ Done
+      2026-08-23: `blocklist.txt` carries
+      `# Updated : 2026-08-23T23:00:01Z (refreshed hourly)` in its header,
+      so a raw.githubusercontent consumer can see the snapshot's age.
 
 ## Medium
 
-- [ ] **Announce the schema break.** `score` → `tier` (see CHANGELOG
-      2026-07-22) will silently break anyone who pinned to the JSON. The repo
-      has stargazers; a release note or a tagged `v1` for the old format would
-      give them something to pin to.
+- [x] ~~**Announce the schema break.**~~ Done 2026-08-23: CHANGELOG lines
+      94-107 carry the migration table and the explicit "Anything keying on
+      `score` must move to `tier`". README no longer mentions `score`, and
+      `v1.0.0` (score schema) and `v2.0.0` (tier schema) are both on origin,
+      so a stargazer pinned to the old format has a tag to hold.
 
 - [x] ~~**Tag releases.**~~ Done 2026-07-22: `v1.0.0` on the initial score
-      schema, `v2.0.0` on the tier schema. Both are local until pushed.
+      schema, `v2.0.0` on the tier schema. Both confirmed on origin
+      2026-08-23 (`git ls-remote --tags`); the "local until pushed" caveat
+      this note carried is no longer true.
 
 - [x] ~~**Publish the overlap measurement.**~~ Done 2026-07-22. The old
       "~20–25% overlap" claim was wrong: actual overlap against the live
