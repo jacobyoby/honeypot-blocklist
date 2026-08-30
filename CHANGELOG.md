@@ -6,6 +6,22 @@ Notable changes to the published blocklist and its methodology. Format follows
 Methodology changes affect who appears on the list, so they are treated as
 breaking and called out explicitly.
 
+## [2026-08-30] — claims re-measured: the feed is now SSH-led
+
+### Changed
+
+- Re-measured overlap/novelty against the live 231-entry feed (was 153 on
+  2026-08-24) and refreshed the README figures. Novelty vs. the major
+  aggregates fell 64.7% → 52.4%; blocklist.de overlap rose 9.8% → 32.5%.
+- Re-measured protocol composition from the sensor over the current 30-day
+  window: SSH is now the largest single protocol (95 published IPs), telnet
+  second (74). This inverts the 2026-07-22 picture (telnet 126, SSH 33), so the
+  README's "treat this as a telnet list, not an SSH list" guidance is rewritten
+  as an SSH-led list that also carries a large telnet/IoT population.
+- No change to who is on the list or to the tier criteria — this is a claims
+  refresh, not a methodology change. Triggered by `validate.py`'s claim-drift
+  warning (51% size drift) and tracked in issue #9.
+
 ## [2026-08-24] — the front-page claims are now guarded too
 
 ### Added

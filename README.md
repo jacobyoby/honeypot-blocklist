@@ -15,65 +15,72 @@ goes quiet.
 Because this one is **original sensor data**, not a re-aggregation. Every IP here
 hit *my* honeypot directly.
 
-**64.7% of the current list appears on no major public blocklist.** Re-measured
-2026-08-24 with `scripts/overlap.py` against the live 153-entry feed (previous
-measurement 2026-07-22, 181 entries, 63.5% novel — the headline has held):
+**52.4% of the current list appears on no major public blocklist.** Re-measured
+2026-08-30 with `scripts/overlap.py` against the live 231-entry feed (previous
+measurements: 2026-08-24, 153 entries, 64.7% novel; 2026-07-22, 181 entries,
+63.5% novel):
 
-| List | Overlap | 2026-07-22 |
-|---|---|---|
-| firehol_level1 | 22.2% | 13.8% |
-| spamhaus_drop | 22.2% | 13.3% |
-| firehol_level3 | 17.6% | 19.9% |
-| blocklist_de | 9.8% | 14.4% |
-| dshield | 0.0% | 1.7% |
-| **any of the above** | **35.3%** | **36.5%** |
+| List | 2026-08-30 | 2026-08-24 | 2026-07-22 |
+|---|---|---|---|
+| firehol_level1 | 14.3% | 22.2% | 13.8% |
+| spamhaus_drop | 14.3% | 22.2% | 13.3% |
+| firehol_level3 | 10.4% | 17.6% | 19.9% |
+| blocklist_de | 32.5% | 9.8% | 14.4% |
+| dshield | 1.3% | 0.0% | 1.7% |
+| **any of the above** | **47.6%** | **35.3%** | **36.5%** |
 
-So roughly two thirds are attackers the big aggregates haven't listed. That's
+So just over half are attackers the big aggregates haven't listed. That's
 the point of a live sensor — and it's also the honest ceiling on this feed's
 value: it is small and it is one vantage point, so treat it as a supplement to
-the large lists, not a replacement.
+the large lists, not a replacement. The novelty figure moves as both the feed
+and the aggregates change, so trust the measurement date above, not the number
+alone.
 
 Reproduce it yourself: [`scripts/overlap.py`](scripts/overlap.py).
 
-## What's actually in it — mostly telnet, not SSH
+## What's actually in it — SSH now leads
 
 Worth knowing before you use this, because it determines whether the list is
-relevant to you. Measured 2026-07-22, distinct published IPs by the protocol
-they attacked:
+relevant to you. Distinct published IPs by the protocol they attacked, measured
+2026-08-30 against the current 30-day observation window:
 
-| Protocol | IPs |
-|---|---|
-| **telnet** | **126** |
-| ssh | 33 |
-| mysql | 26 |
-| ftp | 6 |
-
-Despite SSH producing the *most events* (109,896 vs telnet's 86,431 over 30
-days), telnet contributes ~4× more distinct addresses. That is the IoT-botnet
-signature: many compromised devices each doing modest volume, versus a handful
-of SSH bruteforcers hammering hard. Because the list is per-IP, telnet
-dominates it.
-
-Comparing against other operators' honeypot feeds confirms it — overlap with
-dataplane.org's telnet feed is **33.3%**, against just **5.2%** for their SSH
-feed. The ratio is what matters and it has held across both measurements
-(~5x then, ~6x now):
-
-| Peer honeypot feed | Overlap | 2026-07-22 |
+| Protocol | 2026-08-30 | 2026-07-22 |
 |---|---|---|
-| dataplane telnetlogin (telnet) | 33.3% | 45.3% |
-| dataplane vncrfb (VNC) | 12.4% | 1.7% |
-| greensnow | 6.5% | 3.3% |
-| dataplane sshpwauth (SSH) | 5.2% | 9.4% |
-| **any of the above** | **52.9%** | — |
+| **ssh** | **95** | 33 |
+| telnet | 74 | 126 |
+| vnc | 35 | — |
+| mysql | 22 | 26 |
+| ftp | 11 | 6 |
+| http | 4 | — |
 
-The one real mover is VNC: **1.7% to 12.4%**, a 7x rise in a month. The
-telnet-dominant conclusion below is unchanged, but VNC is no longer a rounding
-error in this feed's composition.
+(An IP that attacked several protocols is counted once per protocol, so the
+column sums to more than the 231 published addresses.)
 
-**So: treat this as a telnet/IoT-botnet list that also catches SSH, not an SSH
-list.** If you are looking specifically for SSH bruteforcers, dataplane's
-sshpwauth or DShield cover that population far better than this does.
+**The composition has flipped since mid-July.** On 2026-07-22 telnet dominated
+(126 addresses, ~4× SSH's 33) — the IoT-botnet signature of many compromised
+devices each doing modest volume. As of 2026-08-30 SSH is the largest single
+protocol (95 addresses) and telnet has dropped to second (74): over that window
+the sensor's attacker population shifted from telnet/IoT sweeps toward SSH
+bruteforce. The window rolls, so check the measurement date before relying on
+the mix.
+
+Comparing against other operators' honeypot feeds confirms the shift — overlap
+with dataplane.org's SSH feed has risen to **35.5%**, now above the **22.1%**
+overlap with their telnet feed. On 2026-08-24 the ratio pointed the other way
+(5.2% SSH vs 33.3% telnet):
+
+| Peer honeypot feed | 2026-08-30 | 2026-08-24 | 2026-07-22 |
+|---|---|---|---|
+| dataplane sshpwauth (SSH) | 35.5% | 5.2% | 9.4% |
+| dataplane telnetlogin (telnet) | 22.1% | 33.3% | 45.3% |
+| greensnow | 26.4% | 6.5% | 3.3% |
+| dataplane vncrfb (VNC) | 14.3% | 12.4% | 1.7% |
+| **any of the above** | **72.7%** | **52.9%** | — |
+
+**So: this is currently an SSH-led list that also carries a large telnet/IoT
+population.** If you are here for SSH bruteforcers, the feed now covers them
+well; if you are here only for telnet/IoT botnets, that tier is still
+substantial but is no longer the majority.
 
 *(Peer feeds are queried for measurement only. dataplane.org is non-commercial
 and prohibits redistribution — none of their data is in this feed, which
