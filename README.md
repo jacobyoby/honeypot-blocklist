@@ -88,19 +88,19 @@ remains entirely original sensor output.)*
 
 ## How an IP gets on the list
 
-Two tiers. Both require real attack activity **within the last 30 days**;
+Two tiers. Both require real attack activity within the last 30 days;
 dormant entries decay off on their own.
 
 **`credential`** — connected to a decoy service and submitted login credentials
-**50+ times**. Honeypot-confirmed, never inferred.
+repeatedly. Honeypot-confirmed, never inferred.
 
-**`scanner`** — submitted *no* credentials at all, but probed at abusive volume:
-**1000+ connection events** inside the window, roughly 33+/day sustained against
-a single quiet host. This tier exists because high-volume protocol scanners
-(pure VNC screen-scrapers, say) never submit credentials and so never reach the
-credential bar, despite being the noisiest traffic the sensor sees. The
-threshold sits inside a real gap in the measured distribution: the casual tail
-tops out around 600 events, the scanner cluster starts near 1,350.
+**`scanner`** — submitted *no* credentials at all, but probed at abusive,
+sustained volume against a single quiet host. This tier exists because
+high-volume protocol scanners (pure VNC screen-scrapers, say) never submit
+credentials and so never reach the credential bar, despite being the noisiest
+traffic the sensor sees. The exact floors for both tiers are deliberately not
+published here; they sit inside a measured gap between casual and scanner
+traffic and are revised as that distribution moves.
 
 ### Always excluded
 
@@ -126,21 +126,11 @@ with the consumer recipes updated alongside it, not as a surprise row.
 `attempts` is lifetime credential attempts for credential-tier entries, and
 in-window connection events for scanner-tier ones. `bans` counts credential-tier
 ban cycles; it is always `0` for scanner-tier entries because their ban cycles
-are tracked separately — **both tiers are ban-listed and filtered at the host;
-the sensors themselves deliberately remain reachable.**
+are tracked separately.
 
-> **Enforcement note (2026-08-06).** Ban rules live in the host's `INPUT` chain.
-> The sensors run in containers whose published ports traverse `DOCKER-USER`,
-> so listed addresses still reach the sensors. That gap was measured and then
-> kept **on purpose**: 96.7% of this sensor's telnet credential volume
-> originates from already-listed addresses, so filtering at the sensor would
-> suppress the very collection this feed is built from. A honeypot that drops
-> the addresses it exists to observe stops observing. Host services are
-> filtered; the sensors are not.
->
-> Consequently `attempts` for a listed address keeps rising after
-> `first_banned`. That is by design, not a bookkeeping error — do not read
-> `first_banned` as "traffic stopped".
+> `attempts` for a listed address may keep rising after `first_banned`. That is
+> expected, not a bookkeeping error — do not read `first_banned` as "traffic
+> stopped".
 
 `first_seen` and `last_seen` are both *observations* — attack activity inside
 the current window — so `first_seen <= last_seen` always holds. `first_banned`
