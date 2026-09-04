@@ -3,6 +3,7 @@ package validator
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/fs"
@@ -462,5 +463,5 @@ func displayPath(root, name string) string {
 }
 
 func errorsIsNotExist(err error) bool {
-	return os.IsNotExist(err)
+	return errors.Is(err, fs.ErrNotExist)
 }

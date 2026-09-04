@@ -57,6 +57,22 @@ func TestValidateRejectsFormulaCells(t *testing.T) {
 	}
 }
 
+func TestValidateRejectsFormulaCellsWithLeadingSpaces(t *testing.T) {
+	fixture := fixtureFS()
+	row := "203.0.113.10,credential,1,50,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z, =cmd|' /C calc'!A0\r\n"
+	fixture["blocklist.csv"] = mapFile("ip,tier,bans,attempts,first_seen,last_seen,first_banned,asn\r\n" + row)
+	fixture["blocklist.misp.csv"] = mapFile(" =cmd|' /C calc'!A0\r\n")
+
+	result := validate(fixture, validationOptions{
+		displayRoot:              ".",
+		allowDocumentationRanges: true,
+	})
+
+	if !hasErrorContaining(result, "begins with a formula character") {
+		t.Fatalf("Validate() errors = %v", result.Errors)
+	}
+}
+
 func TestValidateRejectsDuplicateCSVRows(t *testing.T) {
 	fixture := fixtureFS()
 	row := "203.0.113.10,credential,1,50,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z,AS64500\r\n"

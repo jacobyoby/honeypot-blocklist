@@ -328,8 +328,12 @@ func (s *validationState) checkCell(value, where string) {
 	if value == "" {
 		return
 	}
-	first := value[0]
-	if first == '\t' || first == '\r' || first == '\n' {
+	trimmed := strings.TrimLeft(value, " \t")
+	if trimmed == "" {
+		return
+	}
+	first := trimmed[0]
+	if first == '\r' || first == '\n' {
 		s.err(fmt.Sprintf(
 			"%s: cell %s begins with a control character; a spreadsheet strips it and then evaluates what follows",
 			where, pythonRepr(value),
