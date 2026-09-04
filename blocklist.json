@@ -8,12 +8,12 @@
   "inclusion_criteria": "two tiers, both requiring real attack activity within the last 30 days: 'credential' = honeypot-confirmed repeated credential-attack attempts (50+); 'scanner' = sustained credential-less abuse, 1000+ connection/probe events in-window",
   "window_days": 30,
   "scanner_min_events": 1000,
-  "count": 315,
+  "count": 319,
   "count_by_tier": {
-   "credential": 273,
+   "credential": 277,
    "scanner": 42
   },
-  "updated": "2026-09-04T18:00:02Z",
+  "updated": "2026-09-04T19:00:02Z",
   "update_frequency": "hourly",
   "license": "CC0-1.0",
   "field_notes": "tier: 'credential' or 'scanner'. For credential-tier entries, attempts = lifetime credential attempts and bans = ban cycles; for scanner-tier entries, attempts = connection events inside the current window and bans is always 0 \u2014 both tiers are firewalled on the sensor, but scanner ban cycles are tracked separately and are not counted in this field. first_seen and last_seen both describe observed attack activity inside the current window, so first_seen <= last_seen always holds. first_banned is bookkeeping \u2014 when this IP was first firewalled \u2014 and may fall outside the window or after last_seen; it is null for scanner-tier entries.",
@@ -100,8 +100,8 @@
    "ip": "8.39.235.18",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1524,
-   "first_seen": "2026-08-05T18:00:27Z",
+   "attempts": 1508,
+   "first_seen": "2026-08-05T19:01:58Z",
    "last_seen": "2026-08-12T09:36:49Z",
    "first_banned": null,
    "asn": "AS397423"
@@ -300,9 +300,9 @@
    "ip": "37.148.132.205",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1725,
+   "attempts": 1727,
    "first_seen": "2026-08-22T03:01:44Z",
-   "last_seen": "2026-09-04T17:39:34Z",
+   "last_seen": "2026-09-04T18:56:30Z",
    "first_banned": null,
    "asn": "AS210356"
   },
@@ -310,9 +310,9 @@
    "ip": "37.148.133.121",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1260,
+   "attempts": 1262,
    "first_seen": "2026-08-29T01:34:38Z",
-   "last_seen": "2026-09-04T17:37:24Z",
+   "last_seen": "2026-09-04T18:52:41Z",
    "first_banned": null,
    "asn": "AS210356"
   },
@@ -320,9 +320,9 @@
    "ip": "37.148.134.161",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1745,
+   "attempts": 1746,
    "first_seen": "2026-08-26T09:46:34Z",
-   "last_seen": "2026-09-04T17:39:01Z",
+   "last_seen": "2026-09-04T18:55:52Z",
    "first_banned": null,
    "asn": "AS210356"
   },
@@ -364,6 +364,16 @@
    "first_seen": "2026-09-03T10:05:01Z",
    "last_seen": "2026-09-03T11:17:34Z",
    "first_banned": "2026-09-03T11:25:06Z",
+   "asn": "AS8075"
+  },
+  {
+   "ip": "40.121.200.75",
+   "tier": "credential",
+   "bans": 1,
+   "attempts": 50,
+   "first_seen": "2026-09-04T17:16:16Z",
+   "last_seen": "2026-09-04T18:28:23Z",
+   "first_banned": "2026-09-04T18:35:07Z",
    "asn": "AS8075"
   },
   {
@@ -484,6 +494,16 @@
    "first_seen": "2026-08-30T09:28:11Z",
    "last_seen": "2026-08-30T10:33:25Z",
    "first_banned": "2026-08-30T10:40:06Z",
+   "asn": "AS132203"
+  },
+  {
+   "ip": "43.166.137.151",
+   "tier": "credential",
+   "bans": 1,
+   "attempts": 50,
+   "first_seen": "2026-09-04T17:14:17Z",
+   "last_seen": "2026-09-04T18:16:55Z",
+   "first_banned": "2026-09-04T18:20:06Z",
    "asn": "AS132203"
   },
   {
@@ -782,7 +802,7 @@
    "bans": 8,
    "attempts": 1287,
    "first_seen": "2026-08-15T05:24:03Z",
-   "last_seen": "2026-08-28T07:25:59Z",
+   "last_seen": "2026-09-04T18:09:07Z",
    "first_banned": "2026-04-05T08:30:06Z",
    "asn": "AS401626"
   },
@@ -1132,7 +1152,7 @@
    "bans": 3,
    "attempts": 39609,
    "first_seen": "2026-09-04T13:20:13Z",
-   "last_seen": "2026-09-04T17:55:43Z",
+   "last_seen": "2026-09-04T18:52:47Z",
    "first_banned": "2026-06-18T20:06:22Z",
    "asn": "AS398101"
   },
@@ -1200,9 +1220,9 @@
    "ip": "95.81.123.91",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 3235,
+   "attempts": 3236,
    "first_seen": "2026-08-21T13:58:06Z",
-   "last_seen": "2026-09-04T17:38:00Z",
+   "last_seen": "2026-09-04T18:18:13Z",
    "first_banned": null,
    "asn": "AS209641"
   },
@@ -1370,8 +1390,8 @@
    "ip": "103.134.70.35",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 3072,
-   "first_seen": "2026-08-05T18:31:17Z",
+   "attempts": 3069,
+   "first_seen": "2026-08-05T19:05:24Z",
    "last_seen": "2026-08-17T23:16:02Z",
    "first_banned": null,
    "asn": "AS138594"
@@ -1477,6 +1497,16 @@
    "asn": "AS53667"
   },
   {
+   "ip": "106.251.244.178",
+   "tier": "credential",
+   "bans": 1,
+   "attempts": 50,
+   "first_seen": "2026-09-04T17:18:41Z",
+   "last_seen": "2026-09-04T18:40:26Z",
+   "first_banned": "2026-09-04T18:45:08Z",
+   "asn": "AS3786"
+  },
+  {
    "ip": "107.150.100.146",
    "tier": "credential",
    "bans": 1,
@@ -1490,9 +1520,9 @@
    "ip": "107.172.71.141",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 2762,
-   "first_seen": "2026-08-05T18:53:18Z",
-   "last_seen": "2026-09-04T16:55:12Z",
+   "attempts": 2767,
+   "first_seen": "2026-08-05T19:07:04Z",
+   "last_seen": "2026-09-04T18:27:07Z",
    "first_banned": null,
    "asn": "AS36352"
   },
@@ -1500,8 +1530,8 @@
    "ip": "107.172.158.148",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1578,
-   "first_seen": "2026-08-05T18:03:27Z",
+   "attempts": 1570,
+   "first_seen": "2026-08-05T19:05:45Z",
    "last_seen": "2026-08-25T21:22:24Z",
    "first_banned": null,
    "asn": "AS36352"
@@ -1520,9 +1550,9 @@
    "ip": "108.165.179.155",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1802,
+   "attempts": 1803,
    "first_seen": "2026-08-21T13:56:55Z",
-   "last_seen": "2026-09-04T17:38:09Z",
+   "last_seen": "2026-09-04T18:18:26Z",
    "first_banned": null,
    "asn": "AS210356"
   },
@@ -1530,9 +1560,9 @@
    "ip": "108.165.179.194",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1222,
+   "attempts": 1224,
    "first_seen": "2026-08-27T11:48:36Z",
-   "last_seen": "2026-09-04T17:34:52Z",
+   "last_seen": "2026-09-04T18:50:29Z",
    "first_banned": null,
    "asn": "AS210356"
   },
@@ -1540,9 +1570,9 @@
    "ip": "108.165.230.122",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1922,
+   "attempts": 1924,
    "first_seen": "2026-08-21T13:56:52Z",
-   "last_seen": "2026-09-04T17:36:24Z",
+   "last_seen": "2026-09-04T18:53:14Z",
    "first_banned": null,
    "asn": "AS210356"
   },
@@ -1550,9 +1580,9 @@
    "ip": "109.51.157.192",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 13392,
+   "attempts": 13414,
    "first_seen": "2026-08-17T19:01:20Z",
-   "last_seen": "2026-09-02T21:15:05Z",
+   "last_seen": "2026-09-04T18:40:39Z",
    "first_banned": null,
    "asn": "AS2860"
   },
@@ -1630,8 +1660,8 @@
    "ip": "112.158.179.84",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 9375,
-   "first_seen": "2026-08-05T18:00:19Z",
+   "attempts": 9141,
+   "first_seen": "2026-08-05T19:00:04Z",
    "last_seen": "2026-09-03T10:09:21Z",
    "first_banned": null,
    "asn": "AS17858"
@@ -1962,7 +1992,7 @@
    "bans": 4,
    "attempts": 5400,
    "first_seen": "2026-09-04T00:17:20Z",
-   "last_seen": "2026-09-04T16:33:23Z",
+   "last_seen": "2026-09-04T18:16:57Z",
    "first_banned": "2026-06-29T15:55:39Z",
    "asn": "AS398101"
   },
@@ -2040,8 +2070,8 @@
    "ip": "139.99.113.216",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1548,
-   "first_seen": "2026-08-05T18:17:35Z",
+   "attempts": 1545,
+   "first_seen": "2026-08-05T19:10:39Z",
    "last_seen": "2026-08-31T01:24:38Z",
    "first_banned": null,
    "asn": "AS16276"
@@ -2050,8 +2080,8 @@
    "ip": "139.199.80.137",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1407,
-   "first_seen": "2026-08-05T18:17:39Z",
+   "attempts": 1405,
+   "first_seen": "2026-08-05T19:08:46Z",
    "last_seen": "2026-09-02T22:53:54Z",
    "first_banned": null,
    "asn": "AS45090"
@@ -2061,7 +2091,7 @@
    "tier": "credential",
    "bans": 6,
    "attempts": 578,
-   "first_seen": "2026-08-05T18:53:25Z",
+   "first_seen": "2026-08-05T19:04:54Z",
    "last_seen": "2026-08-07T16:36:29Z",
    "first_banned": "2026-06-18T20:06:08Z",
    "asn": "AS31898"
@@ -2070,8 +2100,8 @@
    "ip": "141.11.62.188",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1414,
-   "first_seen": "2026-08-05T18:02:27Z",
+   "attempts": 1408,
+   "first_seen": "2026-08-05T19:12:50Z",
    "last_seen": "2026-08-12T22:33:21Z",
    "first_banned": null,
    "asn": "AS214481"
@@ -2190,9 +2220,9 @@
    "ip": "151.243.222.53",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 2707,
+   "attempts": 2714,
    "first_seen": "2026-08-21T14:02:48Z",
-   "last_seen": "2026-09-04T17:54:16Z",
+   "last_seen": "2026-09-04T18:54:59Z",
    "first_banned": null,
    "asn": "AS141968"
   },
@@ -2290,9 +2320,9 @@
    "ip": "154.40.33.241",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 2746,
+   "attempts": 2747,
    "first_seen": "2026-08-21T14:02:06Z",
-   "last_seen": "2026-09-04T17:43:31Z",
+   "last_seen": "2026-09-04T18:24:22Z",
    "first_banned": null,
    "asn": "AS979"
   },
@@ -2375,6 +2405,16 @@
    "last_seen": "2026-08-30T23:11:13Z",
    "first_banned": "2026-08-30T23:15:06Z",
    "asn": "AS3816"
+  },
+  {
+   "ip": "161.248.202.88",
+   "tier": "credential",
+   "bans": 1,
+   "attempts": 50,
+   "first_seen": "2026-09-04T17:20:06Z",
+   "last_seen": "2026-09-04T18:26:51Z",
+   "first_banned": "2026-09-04T18:30:11Z",
+   "asn": "AS153527"
   },
   {
    "ip": "163.7.4.169",
@@ -2460,8 +2500,8 @@
    "ip": "172.93.194.34",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 3895,
-   "first_seen": "2026-08-05T18:16:33Z",
+   "attempts": 3893,
+   "first_seen": "2026-08-05T19:23:05Z",
    "last_seen": "2026-08-31T21:31:21Z",
    "first_banned": null,
    "asn": "AS20278"
@@ -2490,9 +2530,9 @@
    "ip": "173.44.62.244",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 2778,
+   "attempts": 2792,
    "first_seen": "2026-08-21T22:20:48Z",
-   "last_seen": "2026-09-04T17:54:10Z",
+   "last_seen": "2026-09-04T18:54:20Z",
    "first_banned": null,
    "asn": "AS36352"
   },
@@ -2521,8 +2561,8 @@
    "tier": "credential",
    "bans": 6,
    "attempts": 3850,
-   "first_seen": "2026-08-05T18:16:59Z",
-   "last_seen": "2026-09-04T17:43:42Z",
+   "first_seen": "2026-08-05T19:51:22Z",
+   "last_seen": "2026-09-04T18:43:31Z",
    "first_banned": "2026-07-05T12:20:38Z",
    "asn": "AS154383"
   },
@@ -2530,9 +2570,9 @@
    "ip": "176.117.79.86",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1091,
+   "attempts": 1094,
    "first_seen": "2026-08-14T14:57:52Z",
-   "last_seen": "2026-09-04T17:53:39Z",
+   "last_seen": "2026-09-04T18:42:28Z",
    "first_banned": null,
    "asn": "AS198362"
   },
@@ -2620,9 +2660,9 @@
    "ip": "181.214.48.144",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1458,
+   "attempts": 1459,
    "first_seen": "2026-08-26T09:54:35Z",
-   "last_seen": "2026-09-04T17:38:40Z",
+   "last_seen": "2026-09-04T18:17:49Z",
    "first_banned": null,
    "asn": "AS210356"
   },
@@ -2640,9 +2680,9 @@
    "ip": "181.214.221.78",
    "tier": "scanner",
    "bans": 0,
-   "attempts": 1796,
+   "attempts": 1798,
    "first_seen": "2026-08-21T22:26:55Z",
-   "last_seen": "2026-09-04T17:38:27Z",
+   "last_seen": "2026-09-04T18:56:43Z",
    "first_banned": null,
    "asn": "AS210356"
   },
@@ -2821,7 +2861,7 @@
    "tier": "credential",
    "bans": 3,
    "attempts": 27214,
-   "first_seen": "2026-08-05T18:00:08Z",
+   "first_seen": "2026-08-05T19:00:02Z",
    "last_seen": "2026-08-06T09:55:41Z",
    "first_banned": "2026-08-05T17:15:08Z",
    "asn": "AS61173"
@@ -3051,7 +3091,7 @@
    "tier": "credential",
    "bans": 7,
    "attempts": 6295,
-   "first_seen": "2026-08-05T18:52:04Z",
+   "first_seen": "2026-08-06T02:39:30Z",
    "last_seen": "2026-09-04T13:04:12Z",
    "first_banned": "2026-06-18T20:06:16Z",
    "asn": "AS208137"
