@@ -14,9 +14,9 @@ breaking and called out explicitly.
   preserves the frozen Python validator's stdout and exit-code contract on the
   current corpus. Sanitized in-memory fixtures cover positive and negative
   paths without retaining captured data.
-- CI now pins action revisions, compiles native and Linux amd64 targets, runs
-  race tests, reports the dependency tree, checks known Go vulnerabilities,
-  and rejects secret-like tracked material.
+- CI now pins Node.js 24 action revisions, compiles native and Linux amd64
+  targets, runs race tests, reports the dependency tree, checks known Go
+  vulnerabilities, and rejects secret-like tracked material.
 
 ### Changed
 
