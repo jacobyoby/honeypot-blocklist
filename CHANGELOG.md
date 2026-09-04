@@ -6,6 +6,29 @@ Notable changes to the published blocklist and its methodology. Format follows
 Methodology changes affect who appears on the list, so they are treated as
 breaking and called out explicitly.
 
+## [Unreleased] — compiled validation shadow
+
+### Added
+
+- A dependency-free Go validator now gates the four publication files and
+  preserves the frozen Python validator's stdout and exit-code contract on the
+  current corpus. Sanitized in-memory fixtures cover positive and negative
+  paths without retaining captured data.
+- CI now pins Node.js 24 action revisions, compiles native and Linux amd64
+  targets, runs race tests, reports the dependency tree, checks known Go
+  vulnerabilities, and rejects secret-like tracked material.
+
+### Changed
+
+- The compiled gate deliberately closes six malformed-input gaps while the
+  valid corpus remains byte-for-byte untouched: boolean counters, incomplete
+  entry objects, duplicate headed/headerless CSV rows, CSV `asn` drift, and
+  malformed ASN identifiers are rejected; every headerless MISP field must
+  also match the headed CSV.
+- Python remains only as a current-corpus parity oracle during the seven-day
+  shadow window. Removing it and its CI runtime is a separately recorded
+  cutover gate, not implied by this foundation change.
+
 ## [2026-08-30] — claims re-measured: the feed is now SSH-led
 
 ### Changed

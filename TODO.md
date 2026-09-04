@@ -5,6 +5,12 @@ host (`~/honeypot-stats`) and has its own TODO.
 
 ## High
 
+- [ ] **Finish the compiled validator cutover.**
+  - [x] Add the Go validator as an additive publication gate with sanitized
+        fixtures, deliberate hardening, and exact current-corpus Python parity.
+  - [ ] Record seven consecutive days of parity, test rollback, then remove
+        `validate.py` and Python setup from CI in the same reviewed change.
+
 - [x] **Harden `validate.py` — it can't stop a bad publish** (Codex review
       2026-07-23; current published data verified clean, this is guardrail work).
       The validator is the only gate between the loam generator and consumers'
@@ -18,11 +24,10 @@ host (`~/honeypot-stats`) and has its own TODO.
         `=HYPERLINK(...)` in `first_banned` passes today.
   - [x] Enforce strict CSV row width (DictReader silently accepts shifted cells
         from an unquoted comma).
-  - [x] Require `blocklist.misp.csv` to exist (STILL OPEN, confirmed
-        2026-08-23: `validate.py:261` guards the whole block behind
-        `if os.path.exists(mpath)`, so a run that never wrote it passes.
-        One-line fix.) Currently optional despite being
-        the documented MISP/OpenCTI feed).
+  - [x] Require `blocklist.misp.csv` to exist. Done in `6457c4e` on
+        2026-08-24: the validator now fails when the documented MISP/OpenCTI
+        feed is missing. Re-verified with positive and negative fixtures on
+        2026-09-04.
   - [x] Parse timestamps as real dates (`2026-99-99` passes string compare).
         *Done: `bad_ts()` parses with `strptime`; shape regex alone let
         `2026-99-99` and `2026-02-30` through. Also pairs `bans` with
