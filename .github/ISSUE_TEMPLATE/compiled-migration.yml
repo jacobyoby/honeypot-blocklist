@@ -1,0 +1,42 @@
+name: Compiled migration
+description: Replace one Python component with a tested Go command.
+title: "[Go migration] "
+labels:
+  - migration
+body:
+  - type: input
+    id: source
+    attributes:
+      label: Existing Python entry point
+      placeholder: validate.py
+    validations:
+      required: true
+  - type: textarea
+    id: boundary
+    attributes:
+      label: Inputs, outputs, side effects, and consumers
+      description: State what must remain byte-for-byte or behaviorally stable.
+    validations:
+      required: true
+  - type: textarea
+    id: fixtures
+    attributes:
+      label: Golden and negative fixtures
+      description: Use reserved example addresses and exclude captured secrets.
+    validations:
+      required: true
+  - type: checkboxes
+    id: gates
+    attributes:
+      label: Required gates
+      options:
+        - label: Go tests, vet, race tests, and native build pass.
+          required: true
+        - label: Linux amd64 build passes with the documented CGO setting.
+          required: true
+        - label: Go and Python results match on all fixtures.
+          required: true
+        - label: Shadow comparison and rollback are documented.
+          required: true
+        - label: Python runtime and CI removal are part of the cutover plan.
+          required: true

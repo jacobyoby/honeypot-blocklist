@@ -20,14 +20,22 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version: "1.27.x"
+          cache: false
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
 
-      - name: Validate published files
-        # Checks the three formats agree, every address is real and routable,
-        # tiers and counts are consistent, and first_seen <= last_seen.
-        run: python3 validate.py .
+      - name: Compile, lint, test, and validate publication files
+        # Go is the additive publication gate. Python remains only as an exact
+        # current-corpus parity oracle during the shadow period. `make check`
+        # also rejects alternate extensions, interpreted-language shebangs,
+        # secret-like material, and known Go vulnerabilities.
+        run: make check
