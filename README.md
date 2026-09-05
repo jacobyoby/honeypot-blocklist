@@ -5,7 +5,7 @@ self-operated [Cowrie](https://github.com/cowrie/cowrie)/Heralding sensor
 directly — SSH, FTP, telnet, MySQL, VNC — and ages off automatically once it
 goes quiet.
 
-- **338 IPs** · 294 credential-tier · 44 scanner-tier · updated `2026-09-05T17:00:02Z`
+- **339 IPs** · 295 credential-tier · 44 scanner-tier · updated `2026-09-05T18:00:01Z`
 - Formats: [`blocklist.txt`](blocklist.txt) (fail2ban/iptables drop-in) · [`blocklist.json`](blocklist.json) · [`blocklist.csv`](blocklist.csv)
 - **Canonical source: <https://jacobrakai.org/feed/>** — regenerated hourly.
   This repo is a periodic snapshot; pull the URL if you want current data.
