@@ -212,7 +212,9 @@ notice.
 
 See [`configs/fail2ban-example.md`](configs/fail2ban-example.md). Point your
 refresh at `https://jacobrakai.org/feed/blocklist.txt` rather than at this repo,
-and refresh hourly.
+and refresh hourly. The recipes use an **atomic swap** pattern — each refresh
+*replaces* the ipset/nftables set rather than appending, so IPs that have aged
+off the feed are automatically removed.
 
 ### MISP
 

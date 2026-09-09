@@ -71,8 +71,9 @@ host (`~/honeypot-stats`) and has its own TODO.
 
 ## Low
 
-- [ ] Add a `configs/` example for nftables — currently only ipset/iptables and
-      nginx are covered.
+- [x] ~~**Add a `configs/` example for nftables.**~~ Done 2026-09-08: nftables
+      set/rule/refresh recipe added to `configs/fail2ban-example.md` alongside
+      the ipset/iptables one.
 
 - [ ] Consider `.netset`/CIDR output for consumers that expect FireHOL-style
       formats.
