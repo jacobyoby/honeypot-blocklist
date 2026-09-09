@@ -6,7 +6,7 @@ directly — SSH, FTP, telnet, MySQL, VNC — and ages off automatically once it
 goes quiet.
 
 - **411 IPs** · 361 credential-tier · 50 scanner-tier · updated `2026-09-09T01:00:01Z`
-- Formats: [`blocklist.txt`](blocklist.txt) (fail2ban/iptables drop-in) · [`blocklist.json`](blocklist.json) · [`blocklist.csv`](blocklist.csv)
+- Formats: [`blocklist.txt`](blocklist.txt) (fail2ban/iptables drop-in) · [`blocklist.json`](blocklist.json) · [`blocklist.csv`](blocklist.csv) · [`blocklist.misp.csv`](blocklist.misp.csv) (header-less, for MISP/OpenCTI positional ingestion)
 - **Canonical source: <https://jacobrakai.org/feed/>** — regenerated hourly.
   This repo is a periodic snapshot; pull the URL if you want current data.
 
@@ -98,9 +98,10 @@ repeatedly. Honeypot-confirmed, never inferred.
 sustained volume against a single quiet host. This tier exists because
 high-volume protocol scanners (pure VNC screen-scrapers, say) never submit
 credentials and so never reach the credential bar, despite being the noisiest
-traffic the sensor sees. The exact floors for both tiers are deliberately not
-published here; they sit inside a measured gap between casual and scanner
-traffic and are revised as that distribution moves.
+traffic the sensor sees. The floors are **50 credential attempts** for
+credential tier and **1 000 connection events** (in-window) for scanner tier;
+both are published in the `blocklist.txt` header and `blocklist.json` meta and
+enforced by the compiled validator in CI.
 
 ### Always excluded
 

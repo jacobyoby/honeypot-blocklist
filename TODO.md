@@ -33,8 +33,10 @@ host (`~/honeypot-stats`) and has its own TODO.
         `2026-99-99` and `2026-02-30` through. Also pairs `bans` with
         `first_banned`, and cross-checks json/csv field VALUES — a
         CSV-only corruption previously passed CI clean.*
-  - [x] `scripts/overlap.py`: measure the local checkout, not the deployed feed,
-        so novelty claims aren't computed from stale data.
+  - [x] `scripts/overlap.py` measures the deployed feed — issue #6 closed
+        (not a defect): local-checkout measurement decided against; the live
+        URL is the correct source for novelty claims since that is what
+        consumers pull.
   - Full findings: Codex review, 2026-07-23. Generator-side (can it emit a bad
     row at all?) is aardvark's `~/honeypot-stats` on loam — flagged on the bus.
 
