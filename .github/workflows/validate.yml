@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: read
+  issues: write
 
 concurrency:
   group: validate-${{ github.ref }}
@@ -38,4 +39,38 @@ jobs:
         # current-corpus parity oracle during the shadow period. `make check`
         # also rejects alternate extensions, interpreted-language shebangs,
         # secret-like material, and known Go vulnerabilities.
-        run: make check
+        # Output is captured for the failure-alert step below.
+        run: make check 2>&1 | tee validator-output.txt
+
+      - name: Close CI failure issue on success
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          EXISTING=$(gh issue list --label ci-failure --state open --json number --jq '.[0].number')
+          if [ -n "$EXISTING" ]; then
+            gh issue close "$EXISTING" --comment "CI validation passed — closing automatically."
+          fi
+
+      - name: Alert on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          EXISTING=$(gh issue list --label ci-failure --state open --json number --jq '.[0].number')
+          BODY="## CI Validation Failed
+
+          **Commit:** ${{ github.sha }}
+          **Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          **Time:** $(date -u)
+
+          ### Validator Output
+          \`\`\`
+          $(cat validator-output.txt 2>/dev/null || echo 'No output captured')
+          \`\`\`
+          "
+          if [ -n "$EXISTING" ]; then
+            gh issue edit "$EXISTING" --body "$BODY"
+          else
+            gh issue create --title "CI validation failure — blocklist gate tripped" --label ci-failure --body "$BODY"
+          fi

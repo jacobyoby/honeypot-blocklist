@@ -162,6 +162,51 @@ go run ./cmd/blocklist-validator .
 make check
 ```
 
+## Publication path
+
+The blocklist moves from sensor to consumer through four stages:
+
+1. **Sensor generates** — the Cowrie/Heralding sensor records attack events and
+   the generator emits updated `blocklist.txt`, `blocklist.json`, `blocklist.csv`,
+   and `blocklist.misp.csv` files.
+2. **Commit** — the generated files are committed to this repository (hourly
+   snapshots are pushed without human review; structural changes go through PRs).
+3. **CI validates** — GitHub Actions runs `make check`, which compiles and runs
+   the Go validator against the committed publication files, checks format
+   parity with the frozen Python oracle, rejects secret-like material, enforces
+   the compiled-language-only rule, and runs the Go vulnerability scanner.
+   **CI is the gate between the generator and every consumer.** If it fails, the
+   committed files are not safe to consume.
+4. **Live** — if CI passes, the files are served at
+   `https://jacobrakai.org/feed/` (mirrored from
+   `raw.githubusercontent.com`). Consumers pulling the canonical URL always get
+   the latest CI-validated snapshot.
+
+### If the CI badge is red
+
+The build badge at the top of this repo reflects the latest validation run.
+**If it is red, do not update your firewall rules.** Instead:
+
+- Check the open issue labelled
+  [`ci-failure`](https://github.com/jacobrakai/honeypot-blocklist/issues?q=label%3Aci-failure) —
+  it contains the failing commit SHA, the workflow run link, and the validator
+  output.
+- Keep using your last known-good blocklist until the issue is closed and the
+  badge turns green. CI automatically closes the issue when validation passes
+  again.
+
+### Sensor-side validation
+
+The sensor-side generator does **not** run the full publication validator before
+committing. Validation is CI-only: the Go validator (`cmd/blocklist-validator`)
+and the Python parity oracle (`validate.py`) run against the committed files
+during `make check` in GitHub Actions. The `scripts/overlap.py` script is an
+analysis tool for measuring feed novelty against public blocklists, not a
+pre-commit gate. This means a bad generator push will land in the repo but will
+be caught by CI before consumers pull it — and the failure-alert step above
+ensures it is visible immediately rather than silently waiting for someone to
+notice.
+
 ## Usage
 
 See [`configs/fail2ban-example.md`](configs/fail2ban-example.md). Point your
