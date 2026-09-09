@@ -290,13 +290,9 @@ func (s *validationState) checkEntries(meta map[string]any, rawEntries []any) {
 	}
 
 	if len(recidivists) != 0 {
-		sample := recidivists
-		if len(sample) > 3 {
-			sample = sample[:3]
-		}
-		s.warn(fmt.Sprintf(
-			"%d of %d entries have first_banned before first_seen (expected: see the column contract in README.md). Sample: %s",
-			len(recidivists), len(rawEntries), pythonStringList(sample),
+		s.info(fmt.Sprintf(
+			"%d of %d entries have first_banned before first_seen (expected: see the column contract in README.md)",
+			len(recidivists), len(rawEntries),
 		))
 	}
 	s.tierCounts = byTier
@@ -329,6 +325,10 @@ func (s *validationState) checkMetaCounts(meta map[string]any, entryCount int) {
 	if !ok || !equalStringIntMaps(declared, actual) {
 		s.err(fmt.Sprintf("meta.count_by_tier=%s but actual is %s", pythonRepr(meta["count_by_tier"]), pythonIntMap(actual)))
 	}
+}
+
+func (s *validationState) info(message string) {
+	s.result.Info = append(s.result.Info, message)
 }
 
 func (s *validationState) err(message string) {

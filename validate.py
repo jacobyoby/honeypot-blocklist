@@ -116,6 +116,7 @@ CSV_COLUMNS = ["ip", "tier", "bans", "attempts", "first_seen", "last_seen",
 
 errors = []
 warnings = []
+infos = []
 
 
 def err(msg):
@@ -124,6 +125,10 @@ def err(msg):
 
 def warn(msg):
     warnings.append(msg)
+
+
+def info(msg):
+    infos.append(msg)
 
 
 def check_ip(raw, where):
@@ -294,9 +299,9 @@ def main():
             recidivists.append(str(addr))
 
     if recidivists:
-        warn(f"{len(recidivists)} of {len(entries)} entries have first_banned "
+        info(f"{len(recidivists)} of {len(entries)} entries have first_banned "
              f"before first_seen (expected: see the column contract in "
-             f"README.md). Sample: {recidivists[:3]}")
+             f"README.md)")
 
     # ---- meta counts must describe the payload ----
     if meta.get("count") != len(entries):
@@ -466,6 +471,8 @@ def main():
 
 
 def report():
+    for i in infos:
+        print(f"INFO  {i}")
     for w in warnings:
         print(f"WARN  {w}")
     for e in errors:

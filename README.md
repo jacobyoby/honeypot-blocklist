@@ -17,19 +17,19 @@ goes quiet.
 Because this one is **original sensor data**, not a re-aggregation. Every IP here
 hit *my* honeypot directly.
 
-**52.4% of the current list appears on no major public blocklist.** Re-measured
-2026-08-30 with `scripts/overlap.py` against the live 231-entry feed (previous
-measurements: 2026-08-24, 153 entries, 64.7% novel; 2026-07-22, 181 entries,
-63.5% novel):
+**46.7% of the current list appears on no major public blocklist.** Re-measured
+2026-09-08 with `scripts/overlap.py` against the live 413-entry feed (previous
+measurements: 2026-08-30, 231 entries, 52.4% novel; 2026-08-24, 153 entries,
+64.7% novel; 2026-07-22, 181 entries, 63.5% novel):
 
-| List | 2026-08-30 | 2026-08-24 | 2026-07-22 |
-|---|---|---|---|
-| firehol_level1 | 14.3% | 22.2% | 13.8% |
-| spamhaus_drop | 14.3% | 22.2% | 13.3% |
-| firehol_level3 | 10.4% | 17.6% | 19.9% |
-| blocklist_de | 32.5% | 9.8% | 14.4% |
-| dshield | 1.3% | 0.0% | 1.7% |
-| **any of the above** | **47.6%** | **35.3%** | **36.5%** |
+| List | 2026-09-08 | 2026-08-30 | 2026-08-24 | 2026-07-22 |
+|---|---|---|---|---|
+| firehol_level1 | 8.2% | 14.3% | 22.2% | 13.8% |
+| spamhaus_drop | 8.2% | 14.3% | 22.2% | 13.3% |
+| firehol_level3 | 4.6% | 10.4% | 17.6% | 19.9% |
+| blocklist_de | 44.6% | 32.5% | 9.8% | 14.4% |
+| dshield | 1.0% | 1.3% | 0.0% | 1.7% |
+| **any of the above** | **53.3%** | **47.6%** | **35.3%** | **36.5%** |
 
 So just over half are attackers the big aggregates haven't listed. That's
 the point of a live sensor — and it's also the honest ceiling on this feed's
@@ -67,17 +67,17 @@ bruteforce. The window rolls, so check the measurement date before relying on
 the mix.
 
 Comparing against other operators' honeypot feeds confirms the shift — overlap
-with dataplane.org's SSH feed has risen to **35.5%**, now above the **22.1%**
+with dataplane.org's SSH feed has risen to **51.6%**, now well above the **11.6%**
 overlap with their telnet feed. On 2026-08-24 the ratio pointed the other way
 (5.2% SSH vs 33.3% telnet):
 
-| Peer honeypot feed | 2026-08-30 | 2026-08-24 | 2026-07-22 |
-|---|---|---|---|
-| dataplane sshpwauth (SSH) | 35.5% | 5.2% | 9.4% |
-| dataplane telnetlogin (telnet) | 22.1% | 33.3% | 45.3% |
-| greensnow | 26.4% | 6.5% | 3.3% |
-| dataplane vncrfb (VNC) | 14.3% | 12.4% | 1.7% |
-| **any of the above** | **72.7%** | **52.9%** | — |
+| Peer honeypot feed | 2026-09-08 | 2026-08-30 | 2026-08-24 | 2026-07-22 |
+|---|---|---|---|---|
+| dataplane sshpwauth (SSH) | 51.6% | 35.5% | 5.2% | 9.4% |
+| dataplane telnetlogin (telnet) | 11.6% | 22.1% | 33.3% | 45.3% |
+| greensnow | 39.0% | 26.4% | 6.5% | 3.3% |
+| dataplane vncrfb (VNC) | 10.9% | 14.3% | 12.4% | 1.7% |
+| **any of the above** | **75.5%** | **72.7%** | **52.9%** | — |
 
 **So: this is currently an SSH-led list that also carries a large telnet/IoT
 population.** If you are here for SSH bruteforcers, the feed now covers them
