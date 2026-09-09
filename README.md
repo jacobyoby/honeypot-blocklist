@@ -1,5 +1,7 @@
 # jacobrakai.org honeypot blocklist
 
+[![Validate blocklist](https://github.com/jacobyoby/honeypot-blocklist/actions/workflows/validate.yml/badge.svg?branch=main)](https://github.com/jacobyoby/honeypot-blocklist/actions/workflows/validate.yml)
+
 A small, **honeypot-confirmed** IP blocklist. Every address here attacked a
 self-operated [Cowrie](https://github.com/cowrie/cowrie)/Heralding sensor
 directly — SSH, FTP, telnet, MySQL, VNC — and ages off automatically once it
@@ -185,11 +187,11 @@ The blocklist moves from sensor to consumer through four stages:
 
 ### If the CI badge is red
 
-The build badge at the top of this repo reflects the latest validation run.
+The build badge at the top of this README reflects the latest validation run.
 **If it is red, do not update your firewall rules.** Instead:
 
 - Check the open issue labelled
-  [`ci-failure`](https://github.com/jacobrakai/honeypot-blocklist/issues?q=label%3Aci-failure) —
+  [`ci-failure`](https://github.com/jacobyoby/honeypot-blocklist/issues?q=label%3Aci-failure) —
   it contains the failing commit SHA, the workflow run link, and the validator
   output.
 - Keep using your last known-good blocklist until the issue is closed and the
