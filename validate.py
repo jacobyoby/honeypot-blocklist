@@ -220,6 +220,30 @@ def main():
     if missing:
         err(f"meta is missing keys: {sorted(missing)}")
 
+    # Window enforcement: meta.updated must be a valid ISO-8601 UTC timestamp.
+    meta_updated = None
+    meta_updated_text = None
+    updated_raw = meta.get("updated")
+    if updated_raw is not None:
+        if not isinstance(updated_raw, str):
+            err(f"meta.updated must be a string, got {updated_raw!r}")
+        else:
+            reason = bad_ts(updated_raw)
+            if reason:
+                err(f"meta.updated={updated_raw!r} {reason}")
+            else:
+                meta_updated = datetime.datetime.strptime(updated_raw, "%Y-%m-%dT%H:%M:%SZ")
+                meta_updated_text = updated_raw
+
+    # Window enforcement: meta.window_days must be a positive integer.
+    window_days = None
+    window_raw = meta.get("window_days")
+    if window_raw is not None:
+        if not isinstance(window_raw, int) or isinstance(window_raw, bool) or window_raw <= 0:
+            err(f"meta.window_days must be a positive integer, got {window_raw!r}")
+        else:
+            window_days = window_raw
+
     if not entries:
         err("blocklist.json contains no entries")
         report()
@@ -297,6 +321,26 @@ def main():
         # Warn only, so a generator change that inverts far more than usual shows.
         if e.get("first_banned") and e["first_seen"] and e["first_banned"] < e["first_seen"]:
             recidivists.append(str(addr))
+
+        # Window enforcement: every timestamp must be <= meta.updated,
+        # and last_seen must be within window_days of meta.updated.
+        if meta_updated is not None and window_days is not None:
+            if e["last_seen"] and not bad_ts(e["last_seen"]):
+                last_seen_dt = datetime.datetime.strptime(e["last_seen"], "%Y-%m-%dT%H:%M:%SZ")
+                if last_seen_dt > meta_updated:
+                    err(f"{where}: {e['ip']} last_seen {e['last_seen']} is after meta.updated {meta_updated_text}")
+                else:
+                    age_days = (meta_updated - last_seen_dt).days
+                    if age_days > window_days:
+                        err(f"{where}: {e['ip']} last_seen {e['last_seen']} is {age_days} days before meta.updated {meta_updated_text}, exceeding window_days={window_days}")
+            if e["first_seen"] and not bad_ts(e["first_seen"]):
+                first_seen_dt = datetime.datetime.strptime(e["first_seen"], "%Y-%m-%dT%H:%M:%SZ")
+                if first_seen_dt > meta_updated:
+                    err(f"{where}: {e['ip']} first_seen {e['first_seen']} is after meta.updated {meta_updated_text}")
+            if e.get("first_banned") and not bad_ts(e["first_banned"]):
+                first_banned_dt = datetime.datetime.strptime(e["first_banned"], "%Y-%m-%dT%H:%M:%SZ")
+                if first_banned_dt > meta_updated:
+                    err(f"{where}: {e['ip']} first_banned {e['first_banned']} is after meta.updated {meta_updated_text}")
 
     if recidivists:
         info(f"{len(recidivists)} of {len(entries)} entries have first_banned "

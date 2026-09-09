@@ -476,6 +476,91 @@ func TestNegativeFixtures(t *testing.T) {
 			},
 			wantError: "not a real date/time",
 		},
+		{
+			name: "last_seen exceeds window_days",
+			mutate: func(f fstest.MapFS) {
+				// last_seen is 31 days before meta.updated (window_days=30)
+				f["blocklist.json"] = mapFile(strings.Replace(
+					string(f["blocklist.json"].Data),
+					`"last_seen": "2026-09-01T00:00:00Z"`,
+					`"last_seen": "2026-08-01T00:00:00Z"`, 1))
+				f["blocklist.csv"] = mapFile(strings.Replace(
+					string(f["blocklist.csv"].Data),
+					"2026-09-01T00:00:00Z,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z",
+					"2026-09-01T00:00:00Z,2026-08-01T00:00:00Z,2026-09-01T00:00:00Z", 1))
+				f["blocklist.misp.csv"] = mapFile(strings.Replace(
+					string(f["blocklist.misp.csv"].Data),
+					"2026-09-01T00:00:00Z,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z",
+					"2026-09-01T00:00:00Z,2026-08-01T00:00:00Z,2026-09-01T00:00:00Z", 1))
+			},
+			wantError: "exceeding window_days",
+		},
+		{
+			name: "invalid meta.updated format",
+			mutate: func(f fstest.MapFS) {
+				f["blocklist.json"] = mapFile(strings.Replace(
+					string(f["blocklist.json"].Data),
+					`"updated": "2026-09-01T00:00:00Z"`,
+					`"updated": "not-a-date"`, 1))
+			},
+			wantError: "meta.updated=",
+		},
+		{
+			name: "meta.window_days zero",
+			mutate: func(f fstest.MapFS) {
+				f["blocklist.json"] = mapFile(strings.Replace(
+					string(f["blocklist.json"].Data),
+					`"window_days": 30`,
+					`"window_days": 0`, 1))
+			},
+			wantError: "meta.window_days must be a positive integer",
+		},
+		{
+			name: "meta.window_days negative",
+			mutate: func(f fstest.MapFS) {
+				f["blocklist.json"] = mapFile(strings.Replace(
+					string(f["blocklist.json"].Data),
+					`"window_days": 30`,
+					`"window_days": -1`, 1))
+			},
+			wantError: "meta.window_days must be a positive integer",
+		},
+		{
+			name: "last_seen after meta.updated",
+			mutate: func(f fstest.MapFS) {
+				f["blocklist.json"] = mapFile(strings.Replace(
+					string(f["blocklist.json"].Data),
+					`"last_seen": "2026-09-01T00:00:00Z"`,
+					`"last_seen": "2026-09-15T00:00:00Z"`, 1))
+				f["blocklist.csv"] = mapFile(strings.Replace(
+					string(f["blocklist.csv"].Data),
+					"2026-09-01T00:00:00Z,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z",
+					"2026-09-01T00:00:00Z,2026-09-15T00:00:00Z,2026-09-01T00:00:00Z", 1))
+				f["blocklist.misp.csv"] = mapFile(strings.Replace(
+					string(f["blocklist.misp.csv"].Data),
+					"2026-09-01T00:00:00Z,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z",
+					"2026-09-01T00:00:00Z,2026-09-15T00:00:00Z,2026-09-01T00:00:00Z", 1))
+			},
+			wantError: "last_seen 2026-09-15T00:00:00Z is after meta.updated",
+		},
+		{
+			name: "first_seen after meta.updated",
+			mutate: func(f fstest.MapFS) {
+				f["blocklist.json"] = mapFile(strings.Replace(
+					string(f["blocklist.json"].Data),
+					`"first_seen": "2026-09-01T00:00:00Z"`,
+					`"first_seen": "2026-09-15T00:00:00Z"`, 1))
+				f["blocklist.csv"] = mapFile(strings.Replace(
+					string(f["blocklist.csv"].Data),
+					"2026-09-01T00:00:00Z,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z",
+					"2026-09-15T00:00:00Z,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z", 1))
+				f["blocklist.misp.csv"] = mapFile(strings.Replace(
+					string(f["blocklist.misp.csv"].Data),
+					"2026-09-01T00:00:00Z,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z",
+					"2026-09-15T00:00:00Z,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z", 1))
+			},
+			wantError: "first_seen 2026-09-15T00:00:00Z is after meta.updated",
+		},
 	}
 
 	for _, tc := range tests {
