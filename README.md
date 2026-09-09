@@ -255,3 +255,9 @@ IPs are dynamic and get reassigned. If your address is here in error, email
 ## License
 
 [CC0-1.0](LICENSE) — public domain, **provided as-is, no warranty**. Verify before blocking.
+
+## Support
+
+[Donate / Support Jacobrakai Foundation — JACOBRAKAI FOUNDATION 501(c)(3)](https://donate.stripe.com/eVq4gy97DanS9h60phfrW00)
+
+**JACOBRAKAI FOUNDATION** (Jacobrakai Foundation) is a 501(c)(3) public charity. EIN 33-3382083 · effective Feb 11, 2025. No Letter 947 PDF URL is available to publish.
