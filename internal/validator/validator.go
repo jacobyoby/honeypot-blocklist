@@ -13,6 +13,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -199,11 +200,43 @@ func (s *validationState) checkMeta(meta map[string]any) {
 	if missing := missingKeys(meta, requiredMeta); len(missing) != 0 {
 		s.err(fmt.Sprintf("meta is missing keys: %s", pythonStringList(missing)))
 	}
+
+	// Window enforcement: meta.updated must be a valid ISO-8601 UTC timestamp.
+	if updatedValue, exists := meta["updated"]; exists && updatedValue != nil {
+		updatedText, isString := updatedValue.(string)
+		if !isString {
+			s.err(fmt.Sprintf("meta.updated must be a string, got %s", pythonRepr(updatedValue)))
+		} else if reason := badTimestamp(updatedText); reason != "" {
+			s.err(fmt.Sprintf("meta.updated=%s %s", pythonRepr(updatedText), reason))
+		}
+	}
+
+	// Window enforcement: meta.window_days must be a positive integer.
+	if windowValue, exists := meta["window_days"]; exists && windowValue != nil {
+		if _, ok := strictPositiveInt(windowValue); !ok {
+			s.err(fmt.Sprintf("meta.window_days must be a positive integer, got %s", pythonRepr(windowValue)))
+		}
+	}
 }
 
 func (s *validationState) checkEntries(meta map[string]any, rawEntries []any) {
 	recidivists := make([]string, 0)
 	byTier := make(map[string]int)
+
+	// Parse meta.updated and window_days for per-entry window enforcement.
+	var metaUpdated time.Time
+	var metaUpdatedText string
+	var hasMetaUpdated bool
+	var windowDays int64
+	if updatedText, ok := meta["updated"].(string); ok && badTimestamp(updatedText) == "" {
+		metaUpdated, _ = time.Parse("2006-01-02T15:04:05Z", updatedText)
+		metaUpdatedText = updatedText
+		hasMetaUpdated = true
+	}
+	if parsed, ok := strictPositiveInt(meta["window_days"]); ok {
+		windowDays = parsed
+	}
+
 	for index, rawEntry := range rawEntries {
 		where := fmt.Sprintf("blocklist.json[%d]", index)
 		entry, ok := rawEntry.(map[string]any)
@@ -285,6 +318,34 @@ func (s *validationState) checkEntries(meta map[string]any, rawEntries []any) {
 			}
 			if firstSeenOK && firstBanned < firstSeen {
 				recidivists = append(recidivists, ip)
+			}
+		}
+
+		// Window enforcement: every timestamp must be <= meta.updated,
+		// and last_seen must be within window_days of meta.updated.
+		if hasMetaUpdated && windowDays > 0 {
+			if lastSeenOK {
+				lastSeenTime, _ := time.Parse("2006-01-02T15:04:05Z", lastSeen)
+				if lastSeenTime.After(metaUpdated) {
+					s.err(fmt.Sprintf("%s: %s last_seen %s is after meta.updated %s", where, ip, lastSeen, metaUpdatedText))
+				} else {
+					ageDays := int64(metaUpdated.Sub(lastSeenTime).Hours() / 24)
+					if ageDays > windowDays {
+						s.err(fmt.Sprintf("%s: %s last_seen %s is %d days before meta.updated %s, exceeding window_days=%d", where, ip, lastSeen, ageDays, metaUpdatedText, windowDays))
+					}
+				}
+			}
+			if firstSeenOK {
+				firstSeenTime, _ := time.Parse("2006-01-02T15:04:05Z", firstSeen)
+				if firstSeenTime.After(metaUpdated) {
+					s.err(fmt.Sprintf("%s: %s first_seen %s is after meta.updated %s", where, ip, firstSeen, metaUpdatedText))
+				}
+			}
+			if hasFirstBanned && firstBanned != "" && badTimestamp(firstBanned) == "" {
+				firstBannedTime, _ := time.Parse("2006-01-02T15:04:05Z", firstBanned)
+				if firstBannedTime.After(metaUpdated) {
+					s.err(fmt.Sprintf("%s: %s first_banned %s is after meta.updated %s", where, ip, firstBanned, metaUpdatedText))
+				}
 			}
 		}
 	}
