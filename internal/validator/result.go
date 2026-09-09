@@ -6,8 +6,9 @@ import (
 	"io"
 )
 
-// Result preserves the legacy validator's ordered warnings and errors.
+// Result preserves the legacy validator's ordered info, warnings and errors.
 type Result struct {
+	Info     []string
 	Warnings []string
 	Errors   []string
 }
@@ -22,6 +23,11 @@ func (r Result) ExitCode() int {
 
 // Render writes the legacy validator's stdout contract.
 func (r Result) Render(w io.Writer) error {
+	for _, info := range r.Info {
+		if _, err := fmt.Fprintf(w, "INFO  %s\n", info); err != nil {
+			return err
+		}
+	}
 	for _, warning := range r.Warnings {
 		if _, err := fmt.Fprintf(w, "WARN  %s\n", warning); err != nil {
 			return err

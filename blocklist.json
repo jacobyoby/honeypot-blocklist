@@ -1,5 +1,6 @@
 {
  "meta": {
+  "schema_version": "1.0",
   "name": "jacobrakai-honeypot-blocklist",
   "description": "Honeypot-confirmed attacker IPs observed against live decoy services (SSH, FTP, telnet, MySQL, VNC): credential-tier entries submitted login credentials repeatedly; scanner-tier entries probed at abusive volume without ever submitting credentials.",
   "maintainer": "jacobrakai",
