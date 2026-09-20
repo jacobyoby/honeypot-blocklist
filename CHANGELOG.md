@@ -10,6 +10,12 @@ breaking and called out explicitly.
 
 ### Added
 
+- **`loader` tier.** An address that fetched or uploaded a payload inside a
+  honeypot session is published on that evidence alone, with no attempts
+  floor. Methodology change: it adds entries the two volume-based tiers could
+  not see (a one-login dropper). `bans` is always `0` and `first_banned` is
+  `null` for this tier, enforced by both validators. Columns are unchanged.
+
 - A dependency-free Go validator now gates the four publication files and
   preserves the frozen Python validator's stdout and exit-code contract on the
   current corpus. Sanitized in-memory fixtures cover positive and negative

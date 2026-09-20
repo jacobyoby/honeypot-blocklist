@@ -90,7 +90,7 @@ remains entirely original sensor output.)*
 
 ## How an IP gets on the list
 
-Two tiers. Both require real attack activity within the last 30 days;
+Three tiers. All require real attack activity within the last 30 days;
 dormant entries decay off on their own.
 
 **`credential`** — connected to a decoy service and submitted login credentials
@@ -104,6 +104,14 @@ traffic the sensor sees. The floors are **50 credential attempts** for
 credential tier and **1 000 connection events** (in-window) for scanner tier;
 both are published in the `blocklist.txt` header and `blocklist.json` meta and
 enforced by the compiled validator in CI.
+
+**`loader`** — delivered a payload. The address fetched a file into a honeypot
+session (a `wget`/`curl` dropper stage) or uploaded one over SFTP/SCP (a
+persistence key, a script). There is no volume floor: one payload is enough,
+because a single login that drops a loader is more dangerous than a thousand
+that do not. An address that also meets the credential bar is listed as
+`credential`; `loader` is for the ones that would otherwise be missed. The
+payloads themselves are never published.
 
 ### Always excluded
 
@@ -127,9 +135,9 @@ sensors ever observe v6 worth publishing, it will arrive as a deliberate change
 with the consumer recipes updated alongside it, not as a surprise row.
 
 `attempts` is lifetime credential attempts for credential-tier entries, and
-in-window connection events for scanner-tier ones. `bans` counts credential-tier
-ban cycles; it is always `0` for scanner-tier entries because their ban cycles
-are tracked separately.
+in-window connection events for scanner- and loader-tier ones. `bans` counts
+credential-tier ban cycles; it is always `0` for scanner- and loader-tier
+entries because their ban cycles are tracked separately.
 
 > `attempts` for a listed address may keep rising after `first_banned`. That is
 > expected, not a bookkeeping error — do not read `first_banned` as "traffic
@@ -138,8 +146,8 @@ are tracked separately.
 `first_seen` and `last_seen` are both *observations* — attack activity inside
 the current window — so `first_seen <= last_seen` always holds. `first_banned`
 is *bookkeeping*: when the address was first ban-listed. It may predate the
-window or fall after `last_seen`, and is `null` for scanner-tier entries. Don't
-use it to reason about recency.
+window or fall after `last_seen`, and is `null` for scanner- and loader-tier
+entries. Don't use it to reason about recency.
 
 ## Schema version
 

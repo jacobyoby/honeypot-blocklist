@@ -25,6 +25,7 @@ var (
 	validTiers = map[string]struct{}{
 		"credential": {},
 		"scanner":    {},
+		"loader":     {},
 	}
 	tierMinimumAttempts = map[string]int64{
 		"credential": 50,
@@ -279,8 +280,10 @@ func (s *validationState) checkEntries(meta map[string]any, rawEntries []any) {
 		if !attemptsOK {
 			s.err(fmt.Sprintf("%s: attempts must be a non-negative int, got %s", where, pythonRepr(entry["attempts"])))
 		}
-		if tier == "scanner" && bansOK && bans != 0 {
-			s.err(fmt.Sprintf("%s: scanner-tier entry has bans=%d, expected 0", where, bans))
+		// scanner and loader tiers are published from evidence other than the
+		// credential ban pipeline, so their ban cycles are never in this field.
+		if (tier == "scanner" || tier == "loader") && bansOK && bans != 0 {
+			s.err(fmt.Sprintf("%s: %s-tier entry has bans=%d, expected 0", where, tier, bans))
 		}
 		floor, hasFloor := tierMinimumAttempts[tier]
 		if tier == "scanner" {

@@ -18,7 +18,7 @@ import json
 import os
 import sys
 
-VALID_TIERS = {"credential", "scanner"}
+VALID_TIERS = {"credential", "scanner", "loader"}
 
 # The README's own inclusion thresholds, enforced rather than merely advertised.
 # meta.inclusion_criteria states 'credential' = 50+ credential attempts and
@@ -271,10 +271,11 @@ def main():
         for field in ("bans", "attempts"):
             if not isinstance(e[field], int) or e[field] < 0:
                 err(f"{where}: {field} must be a non-negative int, got {e[field]!r}")
-        # Documented invariant: scanner-tier entries never carry ban cycles,
-        # because those are tracked in a separate table upstream.
-        if e["tier"] == "scanner" and e["bans"] != 0:
-            err(f"{where}: scanner-tier entry has bans={e['bans']}, expected 0")
+        # Documented invariant: scanner- and loader-tier entries never carry
+        # ban cycles, because those are tracked outside the credential ban
+        # pipeline. loader has no attempts floor: payload delivery is the bar.
+        if e["tier"] in ("scanner", "loader") and e["bans"] != 0:
+            err(f"{where}: {e['tier']}-tier entry has bans={e['bans']}, expected 0")
         # The README advertises a floor per tier; enforce it here so the
         # published criteria describe the published data rather than an
         # intention. scanner's floor comes from meta when the generator states
