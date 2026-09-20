@@ -1,6 +1,7 @@
 package validator
 
 import (
+	"fmt"
 	"io"
 	"io/fs"
 	"strings"
@@ -404,6 +405,17 @@ func TestNegativeFixtures(t *testing.T) {
 			wantError: "scanner-tier entry has bans=",
 		},
 		{
+			name: "loader tier with non-zero bans",
+			mutate: func(f fstest.MapFS) {
+				f["blocklist.json"] = mapFile(loaderFixtureJSON(2, "\"2026-09-01T00:00:00Z\""))
+				row := "203.0.113.10,loader,2,1,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z,AS64500\r\n"
+				f["blocklist.csv"] = mapFile("ip,tier,bans,attempts,first_seen,last_seen,first_banned,asn\r\n" + row)
+				f["blocklist.misp.csv"] = mapFile(row)
+				f["blocklist.txt"] = mapFile("# sanitized fixture\n203.0.113.10\n")
+			},
+			wantError: "loader-tier entry has bans=",
+		},
+		{
 			name: "txt json membership disagreement",
 			mutate: func(f fstest.MapFS) {
 				f["blocklist.txt"] = mapFile("# sanitized fixture\n198.51.100.10\n")
@@ -589,6 +601,57 @@ func TestValidateRealCorpus(t *testing.T) {
 		t.Fatalf("ValidateDir on real repo files: exit code %d, errors: %v, warnings: %v",
 			result.ExitCode(), result.Errors, result.Warnings)
 	}
+}
+
+// TestValidateAcceptsLoaderTier: a loader-tier entry is published on payload
+// delivery alone, so it carries no attempts floor and no ban bookkeeping.
+func TestValidateAcceptsLoaderTier(t *testing.T) {
+	fixture := fixtureFS()
+	fixture["blocklist.json"] = mapFile(loaderFixtureJSON(0, "null"))
+	row := "203.0.113.10,loader,0,1,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z,,AS64500\r\n"
+	fixture["blocklist.csv"] = mapFile("ip,tier,bans,attempts,first_seen,last_seen,first_banned,asn\r\n" + row)
+	fixture["blocklist.misp.csv"] = mapFile(row)
+
+	result := validate(fixture, validationOptions{
+		displayRoot:              ".",
+		allowDocumentationRanges: true,
+	})
+
+	if result.ExitCode() != 0 || len(result.Errors) != 0 {
+		t.Fatalf("Validate() loader fixture: exit %d, errors %v, warnings %v",
+			result.ExitCode(), result.Errors, result.Warnings)
+	}
+}
+
+func loaderFixtureJSON(bans int, firstBanned string) string {
+	return `{
+  "meta": {
+    "schema_version": "1.0",
+    "name": "fixture",
+    "description": "sanitized fixture",
+    "maintainer": "fixture",
+    "homepage": "https://example.invalid/feed/",
+    "contact": "security@example.invalid",
+    "inclusion_criteria": "loader fixture",
+    "window_days": 30,
+    "count": 1,
+    "count_by_tier": {"loader": 1},
+    "updated": "2026-09-01T00:00:00Z",
+    "license": "CC0-1.0"
+  },
+  "ips": [
+    {
+      "ip": "203.0.113.10",
+      "tier": "loader",
+      "bans": ` + fmt.Sprint(bans) + `,
+      "attempts": 1,
+      "first_seen": "2026-09-01T00:00:00Z",
+      "last_seen": "2026-09-01T00:00:00Z",
+      "first_banned": ` + firstBanned + `,
+      "asn": "AS64500"
+    }
+  ]
+}`
 }
 
 func fixtureFS() fstest.MapFS {
