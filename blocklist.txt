@@ -7,7 +7,7 @@
 # Maintainer  : jacobrakai
 # Homepage    : https://jacobrakai.org/feed/
 # Contact     : jacob@jacobrakai.org (delisting / false-positive reports)
-# Inclusion   : two tiers, both requiring attack activity within the
+# Inclusion   : three tiers, all requiring attack activity within the
 #               last 30 days (entries age out automatically):
 #               - credential (477 IPs): connected to a decoy service and
 #                 submitted login credentials repeatedly (50+ attempts).
@@ -15,12 +15,15 @@
 #                 at abusive volume — 1000+ connection events in-window
 #                 (~33+/day sustained; the measured casual-scanner tail
 #                 tops out well under half that threshold).
+#               - loader (13 IPs): fetched a file into a honeypot session
+#                 (wget/curl dropper) or uploaded one over SFTP/SCP. No
+#                 volume floor: one captured payload is the evidence.
 # Exclusions  : private/reserved ranges and known benign internet-survey
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
-#               BOTH tiers.
-# Entries     : 594 (477 credential, 117 scanner)
-# Updated     : 2026-09-20T17:00:02Z (refreshed hourly)
+#               ALL tiers.
+# Entries     : 607 (477 credential, 117 scanner, 13 loader)
+# Updated     : 2026-09-20T17:18:02Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -124,6 +127,7 @@
 46.101.180.162
 46.188.119.26
 46.225.62.66
+46.233.7.48
 46.249.100.150
 47.79.4.6
 47.80.2.90
@@ -207,16 +211,21 @@
 74.118.81.174
 74.225.169.109
 76.79.213.70
+77.40.53.84
 77.74.204.176
 77.90.185.17
 77.90.185.20
 78.39.48.166
 78.135.111.62
 80.66.66.31
+80.83.26.69
 80.94.95.118
+81.23.170.238
 81.79.60.127
 81.85.75.102
+81.200.247.11
 82.29.67.87
+82.147.84.190
 82.152.132.24
 82.200.226.226
 82.208.21.79
@@ -258,6 +267,7 @@
 94.180.139.162
 95.81.123.91
 95.90.13.168
+95.105.71.239
 95.215.0.144
 95.255.158.96
 97.74.87.119
@@ -302,6 +312,7 @@
 103.159.199.43
 103.160.4.144
 103.164.57.37
+103.171.69.181
 103.172.20.218
 103.172.238.168
 103.174.103.177
@@ -374,6 +385,7 @@
 121.137.29.114
 121.160.23.240
 122.166.49.42
+122.166.154.21
 122.168.123.76
 122.168.194.41
 123.58.198.35
@@ -439,7 +451,9 @@
 155.94.154.80
 155.94.233.59
 156.236.66.15
+156.245.246.50
 157.0.0.10
+157.119.70.125
 157.230.18.133
 158.174.210.161
 158.174.211.17
@@ -488,6 +502,7 @@
 173.249.54.93
 175.195.238.137
 176.53.159.196
+176.65.148.190
 176.117.79.86
 176.120.22.61
 177.10.203.106
@@ -566,6 +581,7 @@
 199.241.120.131
 200.77.172.159
 200.149.35.107
+202.65.129.186
 202.91.34.220
 202.152.148.27
 202.152.148.30
