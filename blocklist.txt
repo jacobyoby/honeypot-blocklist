@@ -23,7 +23,7 @@
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
 # Entries     : 618 (479 credential, 118 scanner, 21 loader)
-# Updated     : 2026-09-23T16:00:02Z (refreshed hourly)
+# Updated     : 2026-09-23T17:00:02Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
