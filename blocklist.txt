@@ -11,19 +11,19 @@
 #               last 30 days (entries age out automatically):
 #               - credential (476 IPs): connected to a decoy service and
 #                 submitted login credentials repeatedly (50+ attempts).
-#               - scanner (117 IPs): submitted no credentials but probed
+#               - scanner (118 IPs): submitted no credentials but probed
 #                 at abusive volume — 1000+ connection events in-window
 #                 (~33+/day sustained; the measured casual-scanner tail
 #                 tops out well under half that threshold).
-#               - loader (19 IPs): fetched a file into a honeypot session
+#               - loader (22 IPs): fetched a file into a honeypot session
 #                 (wget/curl dropper) or uploaded one over SFTP/SCP. No
 #                 volume floor: one captured payload is the evidence.
 # Exclusions  : private/reserved ranges and known benign internet-survey
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
-# Entries     : 612 (476 credential, 117 scanner, 19 loader)
-# Updated     : 2026-09-23T06:00:02Z (refreshed hourly)
+# Entries     : 616 (476 credential, 118 scanner, 22 loader)
+# Updated     : 2026-09-23T07:00:01Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -265,6 +265,7 @@
 94.154.43.191
 94.154.43.218
 94.154.46.243
+94.154.46.245
 94.180.139.162
 95.81.123.91
 95.90.13.168
@@ -378,6 +379,7 @@
 117.55.229.156
 117.102.86.226
 117.193.74.35
+118.107.139.205
 118.193.39.103
 118.193.45.65
 120.24.242.235
@@ -438,6 +440,7 @@
 150.109.68.254
 151.225.212.1
 151.243.222.53
+152.32.182.8
 152.32.182.41
 152.32.189.59
 152.32.212.226
@@ -586,6 +589,7 @@
 199.241.120.131
 200.77.172.159
 200.149.35.107
+200.155.66.2
 202.65.129.186
 202.91.34.220
 202.152.148.27
