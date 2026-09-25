@@ -39,6 +39,9 @@ and the aggregates change, so trust the measurement date above, not the number
 alone.
 
 Reproduce it yourself: [`scripts/overlap.py`](scripts/overlap.py).
+AbuseIPDB reputation novelty is a separate check — see
+[`cmd/blocklist-abuseipdb`](cmd/blocklist-abuseipdb); `overlap.py` stays
+aggregates and peer honeypot feeds only.
 
 ## What's actually in it — SSH now leads
 
@@ -256,6 +259,41 @@ Both MISP and OpenCTI map columns **positionally**, not by name. This order is
 therefore permanent — new columns are only ever appended on the right, never
 inserted or reordered. The compiled validator enforces both the order and exact
 value equality with the headed CSV in CI.
+
+## AbuseIPDB
+
+This feed is original sensor data. It is complementary to AbuseIPDB, not a
+re-aggregation of it, and AbuseIPDB listings are never merged back into the
+published files.
+
+The sensor dataset already informs Jacob's AbuseIPDB reporting
+([user 263386](https://www.abuseipdb.com/user/263386)). This repository ships
+operator tooling only — it does not replace sensor-side cron:
+
+```sh
+go run ./cmd/blocklist-abuseipdb check -dry-run
+go run ./cmd/blocklist-abuseipdb check -limit 5
+go run ./cmd/blocklist-abuseipdb report
+go run ./cmd/blocklist-abuseipdb report -submit
+```
+
+`check` and `report -submit` read `ABUSEIPDB_API_KEY` from the environment
+(or a GitHub Actions secret of the same name, if you add a *private* workflow).
+The key is sent as the `Key` header and is never logged. **`report` is dry-run
+unless `-submit` is set.** This repo's CI does not call AbuseIPDB.
+
+Standard daily limits are 1000 checks and 1000 reports, resetting at 00:00 UTC.
+The same IP should not be reported more often than every 15 minutes; `-submit`
+records recent posts in `/tmp/honeypot-blocklist-abuseipdb-state.json` by
+default (`-state` to override).
+
+Published JSON has no protocol field, so category mapping uses tier:
+credential → 18,22 (SSH brute-force); scanner → 14,15; loader → 15,19
+(payload evidence is the tier). An optional `protocol` field is honored if
+you point `-path` at richer local JSON.
+
+This project is not listed on AbuseIPDB's integrations page and does not need
+to be. API reference: <https://docs.abuseipdb.com/>.
 
 ## False positives / delisting
 
