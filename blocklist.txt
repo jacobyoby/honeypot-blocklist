@@ -9,9 +9,9 @@
 # Contact     : jacob@jacobrakai.org (delisting / false-positive reports)
 # Inclusion   : three tiers, all requiring attack activity within the
 #               last 30 days (entries age out automatically):
-#               - credential (450 IPs): connected to a decoy service and
+#               - credential (447 IPs): connected to a decoy service and
 #                 submitted login credentials repeatedly (50+ attempts).
-#               - scanner (118 IPs): submitted no credentials but probed
+#               - scanner (119 IPs): submitted no credentials but probed
 #                 at abusive volume — 1000+ connection events in-window
 #                 (~33+/day sustained; the measured casual-scanner tail
 #                 tops out well under half that threshold).
@@ -22,8 +22,8 @@
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
-# Entries     : 592 (450 credential, 118 scanner, 24 loader)
-# Updated     : 2026-09-28T22:00:01Z (refreshed hourly)
+# Entries     : 590 (447 credential, 119 scanner, 24 loader)
+# Updated     : 2026-09-28T23:00:02Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -220,6 +220,7 @@
 81.85.75.102
 81.200.247.11
 82.29.67.87
+82.29.132.147
 82.147.84.190
 82.152.132.24
 82.200.226.226
@@ -269,7 +270,6 @@
 97.74.87.119
 98.70.127.17
 101.32.240.31
-101.36.119.203
 101.47.155.9
 101.47.156.21
 101.47.158.56
@@ -313,6 +313,7 @@
 103.176.78.149
 103.176.78.162
 103.176.79.139
+103.187.165.26
 103.189.208.13
 103.200.23.154
 103.208.219.38
@@ -496,11 +497,9 @@
 178.128.38.219
 179.57.170.71
 180.92.231.6
-181.47.9.103
 181.214.48.144
 181.214.221.78
 182.43.164.191
-182.43.235.75
 182.48.80.240
 182.73.176.186
 182.92.141.130
@@ -571,7 +570,6 @@
 200.155.66.2
 202.91.34.220
 202.152.148.27
-202.152.148.30
 202.165.15.132
 203.128.6.156
 203.150.107.244
