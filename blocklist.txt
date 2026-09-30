@@ -9,21 +9,21 @@
 # Contact     : jacob@jacobrakai.org (delisting / false-positive reports)
 # Inclusion   : three tiers, all requiring attack activity within the
 #               last 30 days (entries age out automatically):
-#               - credential (439 IPs): connected to a decoy service and
+#               - credential (436 IPs): connected to a decoy service and
 #                 submitted login credentials repeatedly (50+ attempts).
 #               - scanner (123 IPs): submitted no credentials but probed
 #                 at abusive volume — 1000+ connection events in-window
 #                 (~33+/day sustained; the measured casual-scanner tail
 #                 tops out well under half that threshold).
-#               - loader (25 IPs): fetched a file into a honeypot session
+#               - loader (24 IPs): fetched a file into a honeypot session
 #                 (wget/curl dropper) or uploaded one over SFTP/SCP. No
 #                 volume floor: one captured payload is the evidence.
 # Exclusions  : private/reserved ranges and known benign internet-survey
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
-# Entries     : 587 (439 credential, 123 scanner, 25 loader)
-# Updated     : 2026-09-29T23:00:01Z (refreshed hourly)
+# Entries     : 583 (436 credential, 123 scanner, 24 loader)
+# Updated     : 2026-09-30T00:00:02Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -253,7 +253,6 @@
 92.204.138.142
 92.207.4.157
 93.48.225.80
-94.103.3.108
 94.154.43.218
 94.154.46.242
 94.154.46.243
@@ -262,7 +261,6 @@
 94.180.139.162
 95.81.123.91
 95.90.13.168
-95.105.71.239
 95.172.142.52
 95.255.158.96
 96.78.175.36
@@ -350,7 +348,6 @@
 113.161.149.20
 113.161.222.150
 113.177.27.200
-114.10.47.234
 114.33.12.13
 114.55.232.178
 114.111.54.189
@@ -448,7 +445,6 @@
 160.119.66.206
 160.153.175.11
 161.0.63.11
-161.18.13.151
 161.248.202.88
 163.7.1.218
 163.7.3.154
