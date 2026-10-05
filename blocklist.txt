@@ -9,9 +9,9 @@
 # Contact     : jacob@jacobrakai.org (delisting / false-positive reports)
 # Inclusion   : three tiers, all requiring attack activity within the
 #               last 30 days (entries age out automatically):
-#               - credential (401 IPs): connected to a decoy service and
+#               - credential (400 IPs): connected to a decoy service and
 #                 submitted login credentials repeatedly (50+ attempts).
-#               - scanner (127 IPs): submitted no credentials but probed
+#               - scanner (126 IPs): submitted no credentials but probed
 #                 at abusive volume — 1000+ connection events in-window
 #                 (~33+/day sustained; the measured casual-scanner tail
 #                 tops out well under half that threshold).
@@ -22,8 +22,8 @@
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
-# Entries     : 547 (401 credential, 127 scanner, 19 loader)
-# Updated     : 2026-10-05T03:00:02Z (refreshed hourly)
+# Entries     : 545 (400 credential, 126 scanner, 19 loader)
+# Updated     : 2026-10-05T04:00:02Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -247,7 +247,6 @@
 101.79.165.43
 102.88.137.80
 102.88.137.213
-102.210.149.105
 102.211.234.223
 102.220.161.87
 103.7.41.117
@@ -478,7 +477,6 @@
 185.189.15.8
 185.191.126.221
 185.219.41.196
-185.219.41.216
 185.219.41.236
 185.238.250.135
 185.240.102.240
