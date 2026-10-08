@@ -10,6 +10,10 @@ breaking and called out explicitly.
 
 ### Added
 
+- Optional AbuseIPDB check/report command (`cmd/blocklist-abuseipdb`). `check`
+  compares published IPs to AbuseIPDB reputation; `report` stays dry-run
+  unless `-submit` is set. The published feed is unchanged and does not ingest
+  AbuseIPDB blacklist data. The API key is read from `ABUSEIPDB_API_KEY` only.
 - **`loader` tier.** An address that fetched or uploaded a payload inside a
   honeypot session is published on that evidence alone, with no attempts
   floor. Methodology change: it adds entries the two volume-based tiers could
