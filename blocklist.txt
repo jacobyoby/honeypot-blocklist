@@ -11,7 +11,7 @@
 #               last 30 days (entries age out automatically):
 #               - credential (339 IPs): connected to a decoy service and
 #                 submitted login credentials repeatedly (50+ attempts).
-#               - scanner (134 IPs): submitted no credentials but probed
+#               - scanner (157 IPs): submitted no credentials but probed
 #                 at abusive volume — 1000+ connection events in-window
 #                 (~33+/day sustained; the measured casual-scanner tail
 #                 tops out well under half that threshold).
@@ -22,8 +22,8 @@
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
-# Entries     : 497 (339 credential, 134 scanner, 24 loader)
-# Updated     : 2026-10-11T02:00:01Z (refreshed hourly)
+# Entries     : 520 (339 credential, 157 scanner, 24 loader)
+# Updated     : 2026-10-11T03:00:02Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -378,8 +378,21 @@
 164.68.102.175
 164.92.93.36
 165.154.162.74
+165.245.160.178
 165.245.161.157
+165.245.164.170
+165.245.165.12
+165.245.165.151
+165.245.165.232
+165.245.167.73
+165.245.168.152
+165.245.169.28
+165.245.171.28
+165.245.171.220
+165.245.174.25
+165.245.175.183
 165.245.192.37
+165.245.193.182
 165.245.197.250
 166.62.41.13
 166.62.41.190
@@ -481,6 +494,16 @@
 198.98.62.211
 200.155.66.2
 201.79.17.186
+201.79.29.77
+201.79.29.80
+201.79.29.83
+201.79.29.85
+201.79.29.94
+201.79.36.73
+201.79.36.79
+201.79.36.88
+201.79.36.91
+201.79.36.94
 201.79.41.56
 201.79.47.26
 202.91.34.220
