@@ -9,21 +9,21 @@
 # Contact     : jacob@jacobrakai.org (delisting / false-positive reports)
 # Inclusion   : three tiers, all requiring attack activity within the
 #               last 30 days (entries age out automatically):
-#               - credential (327 IPs): connected to a decoy service and
+#               - credential (326 IPs): connected to a decoy service and
 #                 submitted login credentials repeatedly (50+ attempts).
 #               - scanner (192 IPs): submitted no credentials but probed
 #                 at abusive volume — 1000+ connection events in-window
 #                 (~33+/day sustained; the measured casual-scanner tail
 #                 tops out well under half that threshold).
-#               - loader (31 IPs): fetched a file into a honeypot session
+#               - loader (32 IPs): fetched a file into a honeypot session
 #                 (wget/curl dropper) or uploaded one over SFTP/SCP. No
 #                 volume floor: one captured payload is the evidence.
 # Exclusions  : private/reserved ranges and known benign internet-survey
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
-# Entries     : 550 (327 credential, 192 scanner, 31 loader)
-# Updated     : 2026-10-22T16:00:02Z (refreshed hourly)
+# Entries     : 550 (326 credential, 192 scanner, 32 loader)
+# Updated     : 2026-10-22T17:00:01Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -88,7 +88,6 @@
 41.242.115.83
 42.200.66.164
 43.100.16.17
-43.100.90.144
 43.129.193.109
 43.133.61.254
 43.134.85.158
@@ -250,6 +249,7 @@
 103.99.179.204
 103.110.87.57
 103.113.160.247
+103.114.171.254
 103.117.145.130
 103.123.53.88
 103.131.61.163
