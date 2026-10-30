@@ -23,7 +23,7 @@
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
 # Entries     : 531 (320 credential, 182 scanner, 29 loader)
-# Updated     : 2026-10-30T08:00:01Z (refreshed hourly)
+# Updated     : 2026-10-30T09:00:01Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -92,7 +92,6 @@
 45.91.64.10
 45.95.175.105
 45.119.212.99
-45.125.67.31
 45.145.0.60
 45.156.87.243
 45.198.224.141
@@ -437,6 +436,7 @@
 176.53.159.196
 176.65.132.7
 176.65.134.119
+177.3.92.243
 177.11.196.84
 177.36.214.46
 178.105.7.68
