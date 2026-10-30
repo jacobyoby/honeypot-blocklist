@@ -9,7 +9,7 @@
 # Contact     : jacob@jacobrakai.org (delisting / false-positive reports)
 # Inclusion   : three tiers, all requiring attack activity within the
 #               last 30 days (entries age out automatically):
-#               - credential (318 IPs): connected to a decoy service and
+#               - credential (326 IPs): connected to a decoy service and
 #                 submitted login credentials repeatedly (50+ attempts).
 #               - scanner (182 IPs): submitted no credentials but probed
 #                 at abusive volume — 1000+ connection events in-window
@@ -22,8 +22,8 @@
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
-# Entries     : 529 (318 credential, 182 scanner, 29 loader)
-# Updated     : 2026-10-30T10:00:01Z (refreshed hourly)
+# Entries     : 537 (326 credential, 182 scanner, 29 loader)
+# Updated     : 2026-10-30T12:00:01Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -34,6 +34,7 @@
 3.129.187.38
 3.130.168.2
 4.150.201.26
+4.182.219.135
 4.240.126.25
 5.196.63.130
 8.39.235.18
@@ -117,6 +118,7 @@
 58.242.118.12
 59.15.58.148
 59.126.224.134
+61.76.112.4
 61.220.235.10
 62.11.129.215
 62.84.184.220
@@ -225,6 +227,7 @@
 101.96.214.98
 102.88.137.80
 102.88.137.213
+102.210.149.105
 102.220.161.102
 103.23.95.99
 103.25.47.94
@@ -336,6 +339,7 @@
 144.31.126.69
 144.31.151.83
 144.31.152.10
+147.50.227.79
 147.50.231.36
 147.50.231.99
 147.90.234.13
@@ -371,6 +375,7 @@
 161.97.144.12
 161.97.187.200
 161.132.38.233
+163.7.1.218
 163.7.3.154
 163.7.3.241
 163.7.8.79
@@ -497,9 +502,11 @@
 197.248.207.142
 198.46.166.149
 198.98.62.211
+199.241.120.131
 200.8.73.177
 200.37.103.36
 200.71.72.233
+201.77.124.248
 201.79.17.186
 201.79.29.77
 201.79.29.80
@@ -551,6 +558,7 @@
 217.154.38.181
 218.51.148.194
 220.118.173.234
+220.119.37.141
 220.132.197.77
 222.99.31.54
 222.108.100.117
