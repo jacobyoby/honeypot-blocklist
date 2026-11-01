@@ -15,15 +15,15 @@
 #                 at abusive volume — 1000+ connection events in-window
 #                 (~33+/day sustained; the measured casual-scanner tail
 #                 tops out well under half that threshold).
-#               - loader (31 IPs): fetched a file into a honeypot session
+#               - loader (32 IPs): fetched a file into a honeypot session
 #                 (wget/curl dropper) or uploaded one over SFTP/SCP. No
 #                 volume floor: one captured payload is the evidence.
 # Exclusions  : private/reserved ranges and known benign internet-survey
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
-# Entries     : 543 (331 credential, 181 scanner, 31 loader)
-# Updated     : 2026-11-01T04:00:02Z (refreshed hourly)
+# Entries     : 544 (331 credential, 181 scanner, 32 loader)
+# Updated     : 2026-11-01T05:00:02Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -288,7 +288,6 @@
 113.137.40.250
 113.177.27.200
 115.178.75.242
-116.41.81.52
 116.228.233.93
 117.62.22.127
 118.38.44.223
@@ -304,6 +303,7 @@
 121.41.68.29
 121.142.87.218
 121.160.23.240
+121.242.232.147
 123.58.198.35
 123.58.213.128
 123.143.165.243
@@ -479,6 +479,7 @@
 186.158.183.66
 187.251.123.104
 188.220.169.89
+189.165.77.80
 189.203.163.10
 189.204.230.91
 189.217.130.86
