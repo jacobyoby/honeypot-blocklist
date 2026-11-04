@@ -9,21 +9,21 @@
 # Contact     : jacob@jacobrakai.org (delisting / false-positive reports)
 # Inclusion   : three tiers, all requiring attack activity within the
 #               last 30 days (entries age out automatically):
-#               - credential (332 IPs): connected to a decoy service and
+#               - credential (333 IPs): connected to a decoy service and
 #                 submitted login credentials repeatedly (50+ attempts).
-#               - scanner (178 IPs): submitted no credentials but probed
+#               - scanner (179 IPs): submitted no credentials but probed
 #                 at abusive volume — 1000+ connection events in-window
 #                 (~33+/day sustained; the measured casual-scanner tail
 #                 tops out well under half that threshold).
-#               - loader (31 IPs): fetched a file into a honeypot session
+#               - loader (32 IPs): fetched a file into a honeypot session
 #                 (wget/curl dropper) or uploaded one over SFTP/SCP. No
 #                 volume floor: one captured payload is the evidence.
 # Exclusions  : private/reserved ranges and known benign internet-survey
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
-# Entries     : 541 (332 credential, 178 scanner, 31 loader)
-# Updated     : 2026-11-04T20:00:02Z (refreshed hourly)
+# Entries     : 544 (333 credential, 179 scanner, 32 loader)
+# Updated     : 2026-11-04T21:00:01Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -185,6 +185,7 @@
 77.239.124.172
 78.135.111.62
 78.135.111.65
+79.52.62.239
 80.64.218.173
 80.66.66.31
 80.94.95.118
@@ -240,6 +241,7 @@
 103.51.116.158
 103.69.96.120
 103.72.56.174
+103.85.20.177
 103.91.64.38
 103.91.246.101
 103.95.207.248
@@ -527,6 +529,7 @@
 202.86.149.20
 202.161.188.110
 202.165.15.132
+202.165.25.206
 203.121.40.210
 203.151.27.181
 206.189.63.208
