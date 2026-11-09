@@ -9,21 +9,21 @@
 # Contact     : jacob@jacobrakai.org (delisting / false-positive reports)
 # Inclusion   : three tiers, all requiring attack activity within the
 #               last 30 days (entries age out automatically):
-#               - credential (327 IPs): connected to a decoy service and
+#               - credential (328 IPs): connected to a decoy service and
 #                 submitted login credentials repeatedly (50+ attempts).
 #               - scanner (166 IPs): submitted no credentials but probed
 #                 at abusive volume — 1000+ connection events in-window
 #                 (~33+/day sustained; the measured casual-scanner tail
 #                 tops out well under half that threshold).
-#               - loader (32 IPs): fetched a file into a honeypot session
+#               - loader (34 IPs): fetched a file into a honeypot session
 #                 (wget/curl dropper) or uploaded one over SFTP/SCP. No
 #                 volume floor: one captured payload is the evidence.
 # Exclusions  : private/reserved ranges and known benign internet-survey
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
-# Entries     : 525 (327 credential, 166 scanner, 32 loader)
-# Updated     : 2026-11-09T08:00:02Z (refreshed hourly)
+# Entries     : 528 (328 credential, 166 scanner, 34 loader)
+# Updated     : 2026-11-09T09:00:02Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -256,6 +256,7 @@
 103.195.238.237
 103.200.23.154
 103.211.76.8
+103.226.138.196
 103.241.43.193
 103.248.120.6
 104.244.74.84
@@ -273,6 +274,7 @@
 108.174.156.122
 108.186.84.69
 109.91.4.177
+109.195.179.94
 109.199.124.11
 109.205.183.69
 110.164.203.173
@@ -310,6 +312,7 @@
 126.209.52.228
 129.121.75.215
 129.121.78.222
+129.121.98.14
 129.121.137.135
 130.12.180.32
 130.12.180.51
