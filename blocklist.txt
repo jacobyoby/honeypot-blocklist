@@ -11,7 +11,7 @@
 #               last 30 days (entries age out automatically):
 #               - credential (327 IPs): connected to a decoy service and
 #                 submitted login credentials repeatedly (50+ attempts).
-#               - scanner (167 IPs): submitted no credentials but probed
+#               - scanner (166 IPs): submitted no credentials but probed
 #                 at abusive volume — 1000+ connection events in-window
 #                 (~33+/day sustained; the measured casual-scanner tail
 #                 tops out well under half that threshold).
@@ -22,8 +22,8 @@
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
-# Entries     : 526 (327 credential, 167 scanner, 32 loader)
-# Updated     : 2026-11-10T05:00:02Z (refreshed hourly)
+# Entries     : 525 (327 credential, 166 scanner, 32 loader)
+# Updated     : 2026-11-10T06:00:01Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -484,7 +484,6 @@
 195.178.110.218
 195.251.223.206
 196.188.93.169
-196.221.205.156
 197.44.53.74
 197.44.229.34
 197.199.224.52
