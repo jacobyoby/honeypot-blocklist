@@ -9,9 +9,9 @@
 # Contact     : jacob@jacobrakai.org (delisting / false-positive reports)
 # Inclusion   : three tiers, all requiring attack activity within the
 #               last 30 days (entries age out automatically):
-#               - credential (307 IPs): connected to a decoy service and
+#               - credential (304 IPs): connected to a decoy service and
 #                 submitted login credentials repeatedly (50+ attempts).
-#               - scanner (139 IPs): submitted no credentials but probed
+#               - scanner (137 IPs): submitted no credentials but probed
 #                 at abusive volume — 1000+ connection events in-window
 #                 (~33+/day sustained; the measured casual-scanner tail
 #                 tops out well under half that threshold).
@@ -22,8 +22,8 @@
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
-# Entries     : 477 (307 credential, 139 scanner, 31 loader)
-# Updated     : 2026-11-14T02:00:01Z (refreshed hourly)
+# Entries     : 472 (304 credential, 137 scanner, 31 loader)
+# Updated     : 2026-11-14T04:00:01Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -94,7 +94,6 @@
 45.120.216.232
 45.145.0.60
 45.156.87.243
-46.188.119.26
 46.210.82.75
 47.89.241.10
 47.100.201.178
@@ -191,7 +190,6 @@
 89.116.25.3
 89.117.48.206
 91.92.43.221
-91.92.199.36
 91.239.233.228
 92.207.4.157
 94.154.43.208
@@ -275,7 +273,6 @@
 119.28.46.114
 120.26.240.78
 120.27.241.251
-120.48.90.166
 121.142.87.218
 121.229.9.110
 121.242.232.147
@@ -314,7 +311,6 @@
 143.202.209.172
 144.31.106.245
 144.31.126.69
-144.31.151.83
 144.31.152.10
 147.50.227.79
 147.50.231.36
@@ -356,7 +352,6 @@
 165.154.162.74
 165.154.202.254
 165.154.236.104
-165.245.160.178
 165.245.165.166
 165.245.171.15
 165.245.175.210
