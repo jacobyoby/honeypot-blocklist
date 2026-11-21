@@ -11,19 +11,19 @@
 #               last 30 days (entries age out automatically):
 #               - credential (279 IPs): connected to a decoy service and
 #                 submitted login credentials repeatedly (50+ attempts).
-#               - scanner (120 IPs): submitted no credentials but probed
+#               - scanner (109 IPs): submitted no credentials but probed
 #                 at abusive volume — 1000+ connection events in-window
 #                 (~33+/day sustained; the measured casual-scanner tail
 #                 tops out well under half that threshold).
-#               - loader (29 IPs): fetched a file into a honeypot session
+#               - loader (28 IPs): fetched a file into a honeypot session
 #                 (wget/curl dropper) or uploaded one over SFTP/SCP. No
 #                 volume floor: one captured payload is the evidence.
 # Exclusions  : private/reserved ranges and known benign internet-survey
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
-# Entries     : 428 (279 credential, 120 scanner, 29 loader)
-# Updated     : 2026-11-21T16:00:02Z (refreshed hourly)
+# Entries     : 416 (279 credential, 109 scanner, 28 loader)
+# Updated     : 2026-11-21T17:00:02Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -50,7 +50,6 @@
 20.127.185.37
 20.193.141.133
 23.94.61.208
-23.94.122.169
 23.139.36.16
 27.254.144.183
 31.76.57.198
@@ -63,7 +62,6 @@
 36.92.140.209
 36.139.43.130
 37.27.237.145
-37.60.231.46
 37.60.253.125
 37.60.253.219
 38.224.49.7
@@ -117,9 +115,7 @@
 61.76.112.4
 61.220.235.10
 62.11.129.215
-62.84.184.220
 62.84.185.105
-62.84.191.190
 62.84.191.191
 62.169.22.41
 62.169.23.62
@@ -215,7 +211,6 @@
 103.98.176.164
 103.110.87.57
 103.113.160.247
-103.114.171.254
 103.116.136.33
 103.117.145.130
 103.123.53.88
@@ -242,7 +237,6 @@
 107.180.88.176
 108.165.179.155
 109.195.179.94
-109.199.124.11
 110.164.203.173
 111.32.153.180
 112.74.242.167
@@ -301,16 +295,12 @@
 154.57.216.142
 156.236.66.15
 157.173.116.27
-157.173.125.176
-157.173.125.177
 157.173.125.179
 157.173.125.180
 157.173.125.181
-157.173.125.183
 158.180.79.132
 159.89.117.122
 160.119.66.206
-161.97.144.12
 161.97.187.200
 163.7.1.218
 163.7.9.55
@@ -375,7 +365,6 @@
 185.93.89.23
 185.93.89.135
 185.143.197.45
-185.182.9.244
 185.217.127.227
 185.219.41.236
 185.250.37.110
@@ -436,7 +425,6 @@
 211.105.129.57
 211.196.30.241
 212.64.201.210
-213.199.35.95
 213.199.59.115
 213.209.159.115
 213.209.159.154
