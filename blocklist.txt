@@ -11,19 +11,19 @@
 #               last 30 days (entries age out automatically):
 #               - credential (278 IPs): connected to a decoy service and
 #                 submitted login credentials repeatedly (50+ attempts).
-#               - scanner (128 IPs): submitted no credentials but probed
+#               - scanner (127 IPs): submitted no credentials but probed
 #                 at abusive volume — 1000+ connection events in-window
 #                 (~33+/day sustained; the measured casual-scanner tail
 #                 tops out well under half that threshold).
-#               - loader (30 IPs): fetched a file into a honeypot session
+#               - loader (29 IPs): fetched a file into a honeypot session
 #                 (wget/curl dropper) or uploaded one over SFTP/SCP. No
 #                 volume floor: one captured payload is the evidence.
 # Exclusions  : private/reserved ranges and known benign internet-survey
 #               scanners (Censys, Rapid7 Sonar, Shadowserver, Shodan,
 #               BinaryEdge) are filtered out before publication — from
 #               ALL tiers.
-# Entries     : 436 (278 credential, 128 scanner, 30 loader)
-# Updated     : 2026-11-21T12:00:01Z (refreshed hourly)
+# Entries     : 434 (278 credential, 127 scanner, 29 loader)
+# Updated     : 2026-11-21T13:00:01Z (refreshed hourly)
 # License     : CC0 1.0 Universal (public domain) — use freely
 # Warranty    : none; provided as-is. Entries may involve dynamic or
 #               reassigned IPs and age out after 30 days of inactivity.
@@ -376,7 +376,6 @@
 182.156.230.253
 182.237.13.208
 182.253.156.184
-185.12.16.110
 185.25.118.108
 185.93.89.23
 185.93.89.135
@@ -401,7 +400,6 @@
 193.187.110.160
 194.127.166.201
 194.163.185.196
-195.58.58.216
 195.178.110.78
 195.178.110.137
 195.178.110.204
